@@ -4,7 +4,27 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
-import "bootstrap-icons/font/bootstrap-icons.css"
+import 'bootstrap-icons/font/bootstrap-icons.css'
 import './assets/custom.css'
+
+import PrimeVue from 'primevue/config';
+import Aura from '@primevue/themes/aura';
+
+const app = createApp(App);
+app.use(PrimeVue, {
+    theme: {
+        preset: Aura,
+        options: {
+            primary: {
+                50: '#e0f2f7',
+                500: '#3c6e71',
+            },
+            surface: {
+                50: '#f8f9fa',
+                100: '#f1f3f5',
+            },
+        },
+    }
+});
 
 createApp(App).mount('#app')
