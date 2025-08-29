@@ -1,14 +1,19 @@
 <script setup>
 import UserManagement from './components/admin/UserManagement.vue';
-import Footer from './components/Footer.vue';
-import Header from './components/Header.vue'
+import AuthenticatedFooter from './components/AuthenticatedFooter.vue';
+import AuthenticatedHeader from './components/AuthenticatedHeader.vue';
+import ContactUs from './components/common/ContactUs.vue';
+import NormalHeader from './components/NormalHeader.vue';
 </script>
 
 <template class="bg-light">
   <div class="d-flex flex-column min-vh-100">
-    <Header />
+    <!-- <AuthenticatedHeader />
     <UserManagement />
-    <Footer />
+    <AuthenticatedFooter /> -->
+
+    <NormalHeader />
+    <ContactUs />
   </div>
 </template>
 

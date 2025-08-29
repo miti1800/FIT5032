@@ -7,7 +7,7 @@
             <i class="bi bi-list fs-3 primary-color"></i>
         </button>
 
-        <h3 class="px-2 mb-0 text-bold fw-bold primary-color">
+        <h3 class="px-2 mb-0 fw-bold primary-color">
             NutriED
         </h3>
     </div>

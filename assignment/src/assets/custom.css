@@ -11,6 +11,20 @@ body {
     color: white;
 }
 
+.primary-btn {
+    background-color: transparent;
+    color: white;
+    background-color: #284b63;
+    border: 2px solid #284b63;
+    border-radius: 8px;
+}
+
+.primary-btn:hover {
+    color: #284b63;
+    background-color: #fff;
+    border: 2px solid #284b63;
+}
+
 .text-color {
     color: #284b63;
 }

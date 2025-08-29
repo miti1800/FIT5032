@@ -28,6 +28,5 @@
     footer > div {
         flex-direction: column;
     }
-    
 }
 </style>
