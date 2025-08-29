@@ -3,5 +3,49 @@ body {
 }
 
 .primary-color {
-    color: #3c6e71;
+    color: #284b63;
+}
+
+.primary-bg {
+    background-color: #284b63;
+    color: white;
+}
+
+.text-color {
+    color: #284b63;
+}
+
+.custom-table .p-datatable-thead > tr > th {
+  background-color: #284b63;
+  color: white;
+}
+
+.custom-table .p-datatable-tbody > tr > td {
+  color: #284b63;
+}
+
+.icon-btn,
+.avatar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #f3f4f6;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color .15s ease;
+}
+
+.icon-btn:hover,
+.avatar-btn:hover {
+  background-color: #d9d9d9;
+}
+
+.custom-table .p-datatable-tbody > tr > td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

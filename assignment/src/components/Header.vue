@@ -2,7 +2,7 @@
   <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow">
     <div class="d-flex align-items-center">
         <button
-            class="icon-btn primary-color"
+            class="icon-btn hamburger primary-color"
         >
             <i class="bi bi-list fs-3 primary-color"></i>
         </button>
@@ -13,11 +13,11 @@
     </div>
     
     <div class="d-flex align-items-center">
-        <div class="px-2">
+        <div class="px-3">
             <button
                 class="icon-btn primary-color"
             >
-                <i class="bi bi-bell-fill fs-4 primary-color"></i>
+                <i class="bi bi-bell-fill fs-5 primary-color"></i>
             </button>
         </div>
         <button
@@ -34,30 +34,14 @@ import profile from '@/assets/images/profile.jpg'
 </script>
 
 <style scoped>
-.icon-btn,
-.avatar-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: none;
+.hamburger, .avatar-btn {
   background: transparent;
-  color: inherit;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: background-color .15s ease;
-}
-
-.icon-btn:hover,
-.avatar-btn:hover {
-  background-color: #f3f4f6;
 }
 
 .avatar {
-  width: 35px;
-  height: 35px;
-  border-radius: 9999px;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
   object-fit: cover;
 }
 </style>
