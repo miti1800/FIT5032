@@ -6,14 +6,17 @@ body {
     color: #284b63;
 }
 
+.secondary-color {
+    color: #f3f4f6;
+}
+
 .primary-bg {
     background-color: #284b63;
-    color: white;
+    color: #f3f4f6;
 }
 
 .primary-btn {
-    background-color: transparent;
-    color: white;
+    color: #f3f4f6;
     background-color: #284b63;
     border: 2px solid #284b63;
     border-radius: 8px;
@@ -21,12 +24,21 @@ body {
 
 .primary-btn:hover {
     color: #284b63;
-    background-color: #fff;
+    background-color: #f3f4f6;
     border: 2px solid #284b63;
 }
 
-.text-color {
+.secondary-btn {
     color: #284b63;
+    background-color: #f3f4f6;
+    border: 2px solid #284b63;
+    border-radius: 8px;
+}
+
+.secondary-btn:hover {
+    color: #f3f4f6;
+    background-color: #284b63;
+    border: 2px solid #f3f4f6;
 }
 
 .custom-table .p-datatable-thead > tr > th {
@@ -62,4 +74,14 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.footer-link {
+    color: white;
+    text-decoration: none;
+    transition: text-decoration 0.5s ease;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
 }

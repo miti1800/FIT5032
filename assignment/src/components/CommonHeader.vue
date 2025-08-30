@@ -1,7 +1,8 @@
 <template>
   <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow">
     <div class="d-flex align-items-center">
-        <h3 class="px-2 mb-0 fw-bold primary-color">
+        <i class="bi bi-leaf-fill px-2 fs-3"></i>    
+        <h3 class="mb-0 fw-bold primary-color">
             NutriED
         </h3>
     </div>

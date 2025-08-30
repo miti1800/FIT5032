@@ -14,16 +14,6 @@
 </template>
 
 <style scoped>
-.footer-link {
-    color: white;
-    text-decoration: none;
-    transition: text-decoration 0.5s ease;
-}
-
-.footer-link:hover {
-    text-decoration: underline;
-}
-
 @media(max-width: 850px) {
     footer > div {
         flex-direction: column;
