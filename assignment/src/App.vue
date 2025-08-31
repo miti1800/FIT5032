@@ -11,15 +11,12 @@ import CommonHeader from './components/CommonHeader.vue';
 <template class="bg-light">
   <div class="d-flex flex-column min-vh-100">
     <Toast />
-    <AuthenticatedHeader />
+    <!-- <AuthenticatedHeader />
     <UserManagement />
-    <AuthenticatedFooter />
+    <AuthenticatedFooter /> -->
 
-    <!-- <CommonHeader />
+    <CommonHeader />
     <ContactUs />
-    <CommonFooter /> -->
+    <CommonFooter />
   </div>
 </template>
-
-<style scoped>
-</style>
