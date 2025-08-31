@@ -40,7 +40,7 @@ import users from '../../assets/json/users.json';
 
 <style scoped>
 .card {
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 0.5rem;
   border: none;
 }

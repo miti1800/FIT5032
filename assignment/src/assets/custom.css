@@ -1,53 +1,86 @@
+:root {
+  --primary : #284B63;
+  --secondary: #f3f4f6;
+  --grayBg: #d9d9d9;
+  --error: #E85963;
+  --errorBg: #E8596333;
+  --success: #388E3C;
+  --successBg: #388E3C33;
+  --white: #fff
+}
+
 body {
-    background-color: #f3f4f6;
+  background-color: var(--secondary);
 }
 
 .primary-color {
-    color: #284b63;
+  color: var(--primary);
 }
 
 .secondary-color {
-    color: #f3f4f6;
+  color: var(--secondary);
+}
+
+.error-color {
+  color: var(--error);
+}
+
+.error-box, .p-toast-error {
+  background-color: var(--errorBg);
+  color: var(--error);
+  border-radius: 8px;
+}
+
+.success-color {
+  color: var(--success);
+}
+
+.success-box, .p-toast-success {
+  display: flex;
+  align-items: center;
+  background-color: var(--successBg);
+  color: var(--success);
+  border-radius: 8px;
 }
 
 .primary-bg {
-    background-color: #284b63;
-    color: #f3f4f6;
+  background-color: var(--primary);
+  color: var(--secondary);
 }
 
 .primary-btn {
-    color: #f3f4f6;
-    background-color: #284b63;
-    border: 2px solid #284b63;
-    border-radius: 8px;
+  color: var(--secondary);
+  background-color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
 }
 
 .primary-btn:hover {
-    color: #284b63;
-    background-color: #f3f4f6;
-    border: 2px solid #284b63;
+  color: var(--primary);
+  background-color: var(--secondary);
+  border: 2px solid var(--primary);
 }
 
 .secondary-btn {
-    color: #284b63;
-    background-color: #f3f4f6;
-    border: 2px solid #284b63;
-    border-radius: 8px;
+  color: var(--primary);
+  background-color: var(--secondary);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
 }
 
 .secondary-btn:hover {
-    color: #f3f4f6;
-    background-color: #284b63;
-    border: 2px solid #f3f4f6;
+  color: var(--secondary);
+  background-color: var(--primary);
+  border: 2px solid var(--secondary);
 }
 
 .custom-table .p-datatable-thead > tr > th {
-  background-color: #284b63;
-  color: white;
+  background-color: var(--primary);
+  color: var(--secondary);
 }
 
 .custom-table .p-datatable-tbody > tr > td {
-  color: #284b63;
+  color: var(--primary);
 }
 
 .icon-btn,
@@ -58,7 +91,7 @@ body {
   width: 40px;
   height: 40px;
   border: none;
-  background: #f3f4f6;
+  background: var(--secondary);
   color: inherit;
   cursor: pointer;
   border-radius: 8px;
@@ -67,7 +100,7 @@ body {
 
 .icon-btn:hover,
 .avatar-btn:hover {
-  background-color: #d9d9d9;
+  background-color: var(--grayBg);
 }
 
 .custom-table .p-datatable-tbody > tr > td {
@@ -77,11 +110,28 @@ body {
 }
 
 .footer-link {
-    color: white;
-    text-decoration: none;
-    transition: text-decoration 0.5s ease;
+  color: var(--secondary);
+  text-decoration: none;
+  transition: text-decoration 0.5s ease;
 }
 
 .footer-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+}
+
+.form-control {
+  border: 2px solid var(--grayBg);
+  color: var(--primary);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(40, 75, 99, 0.25);
+  outline: none;
+}
+
+.form-control.invalid {
+  border-color: var(--error);
 }

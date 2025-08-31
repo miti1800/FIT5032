@@ -1,11 +1,13 @@
 <template>
   <footer class="primary-bg">
-    <div class="container pt-5 pb-4">
+    <div class="container-fluid p-4">
       <div class="row g-4">
         <div class="col-lg-4 col-md-6">
           <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-leaf-fill me-2 fs-4"></i>
-            <h5 class="mb-0 fw-semibold">NutriED</h5>
+            <h5 class="mb-0 fw-semibold">
+              <i class="bi bi-leaf-fill fs-4"></i>
+              NutriED
+            </h5>
           </div>
           <p class="mb-3 lh-base">
             Making a positive impact in our community through dedication, compassion, and meaningful action.
@@ -83,8 +85,5 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import AuthenticatedFooter from './AuthenticatedFooter.vue';
-
-const currentYear = computed(() => new Date().getFullYear());
 </script>

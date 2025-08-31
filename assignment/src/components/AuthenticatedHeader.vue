@@ -1,13 +1,13 @@
 <template>
-  <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow">
+  <header class="d-flex justify-content-between align-items-center px-1 px-sm-3 p-3 bg-white shadow">
     <div class="d-flex align-items-center">
         <button
             class="icon-btn hamburger primary-color"
         >
             <i class="bi bi-list fs-3 primary-color"></i>
         </button>
-
         <h3 class="px-2 mb-0 fw-bold primary-color">
+            <i class="bi bi-leaf-fill fs-3 primary-color"></i>
             NutriED
         </h3>
     </div>

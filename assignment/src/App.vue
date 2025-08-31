@@ -1,4 +1,5 @@
 <script setup>
+import Toast from 'primevue/toast';
 import UserManagement from './components/admin/UserManagement.vue';
 import AuthenticatedFooter from './components/AuthenticatedFooter.vue';
 import AuthenticatedHeader from './components/AuthenticatedHeader.vue';
@@ -9,13 +10,14 @@ import CommonHeader from './components/CommonHeader.vue';
 
 <template class="bg-light">
   <div class="d-flex flex-column min-vh-100">
-    <!-- <AuthenticatedHeader />
+    <Toast />
+    <AuthenticatedHeader />
     <UserManagement />
-    <AuthenticatedFooter /> -->
+    <AuthenticatedFooter />
 
-    <CommonHeader />
+    <!-- <CommonHeader />
     <ContactUs />
-    <CommonFooter />
+    <CommonFooter /> -->
   </div>
 </template>
 
