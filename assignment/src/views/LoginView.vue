@@ -43,17 +43,17 @@
                             <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
                             {{ errors.password }}
                         </div>
-
-                        <div class="d-flex justify-content-end my-1 primary-color">
-                            <router-link to="/login" class="nav-link mx-0">
-                                Forgot Password?
-                            </router-link>
-                        </div>
                     </div>
 
                     <button type="submit" class="btn primary-btn w-100 mb-3">
                         Sign In
                     </button>
+
+                    <div class="d-flex justify-content-center mb-2 primary-color">
+                        <router-link to="/login" class="nav-link mx-0">
+                            Forgot Password?
+                        </router-link>
+                    </div>
 
                     <div class="primary-color d-flex justify-content-center">
                         <span>Don't have an account?</span>
