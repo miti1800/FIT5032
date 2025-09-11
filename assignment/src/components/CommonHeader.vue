@@ -49,20 +49,6 @@ const toggleMenu = () => {
 </script>
 
 <style scoped>
-.nav-link {
-    margin: 0px 10px;
-    border-bottom: none;
-    transition: border-bottom 0.3s ease;
-}
-
-.nav-link:hover {
-    border-bottom: 2px solid var(--primary);
-}
-
-.nav-link.active {
-    border-bottom: 2px solid var(--primary);
-}
-
 @media (max-width: 992px) {
     .menu-options {
         flex-direction: column;

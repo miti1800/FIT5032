@@ -17,7 +17,7 @@
 
                 <div class="col-lg-6 px-0 px-md-4">
                     <div class="card shadow-lg border-0 rounded-3 primary-color">
-                        <div class="card-body p-4">
+                        <div class="p-5">
                             <h4 class="mb-3 fw-bold">Contact Us</h4>
                             <form @submit.prevent="submitForm">
                                 <div class="mb-3">
@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
+                                <div class="mb-4">
                                     <label for="message" class="form-label">Message
                                         <span class="error-color">*</span>
                                     </label>
@@ -90,7 +90,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn secondary-btn fw-bold">
+                                <button type="submit" class="btn secondary-btn fw-bold px-4">
                                     Send Message
                                 </button>
                             </form>

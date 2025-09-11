@@ -2,7 +2,7 @@
   <footer class="primary-bg">
     <div class="container-fluid p-4">
       <div class="row g-4">
-        <div class="col-lg-4 col-md-6">
+        <div class="col-lg-5 col-md-6">
           <div class="d-flex align-items-center mb-3">
             <h5 class="mb-0 fw-semibold">
               <i class="bi bi-leaf-fill fs-4"></i>
@@ -54,10 +54,10 @@
           </div>
         </div>
 
-        <div class="col-lg-4 col-md-12">
+        <div class="col-lg-2 col-md-12">
           <h5 class="py-1 mb-3 fw-semibold">Get Involved</h5>
-          <div class="d-grid mb-3">
-            <button class="btn secondary-btn fw-medium mx-0">
+          <div class="mb-3">
+            <button class="btn secondary-btn fw-medium mx-0 px-5">
               Sign-Up
             </button>
           </div>

@@ -1,3 +1,140 @@
 <template>
-    
+    <div class="d-flex align-items-center login-background min-vh-100 primary-color">
+        <div class="col-md-6"></div>
+        <div class="col-md-6 d-flex justify-content-center">
+            <div class="w-100 card p-5 shadow-lg primary-color" style="max-width: 430px;">
+                <div class="text-center mt-2 mb-4 primary-color">
+                    <h2 class="h3 fw-bold mb-2">Welcome Back!</h2>
+                    <p>Sign in to access your secured account.</p>
+                </div>
+
+                <form @submit.prevent="handleLogin" class="mb-2">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            Email <span class="error-color">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="email" placeholder="Enter your email"
+                            @blur="() => validateEmail(true)"
+                            @input="() => validateEmail(false)"
+                            v-model="formData.email"
+                            :class="{
+                                invalid: errors.email != null
+                            }"
+                        />
+                        <div v-if="errors.email" class="error-box py-1 px-2 my-1 small d-flex align-items-center">
+                            <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
+                            {{ errors.email }}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label primary-color">
+                            Password <span class="error-color">*</span>
+                        </label>
+                        <input type="password" class="form-control" id="password" placeholder="Enter your password"
+                            @blur="() => validatePassword(true)"
+                            @input="() => validatePassword(false)"
+                            v-model="formData.password"
+                            :class="{
+                                invalid: errors.password != null
+                            }"
+                        />
+                        <div v-if="errors.password" class="error-box py-1 px-2 my-1 small d-flex align-items-center">
+                            <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
+                            {{ errors.password }}
+                        </div>
+
+                        <div class="d-flex justify-content-end my-1 primary-color">
+                            <router-link to="/login" class="nav-link mx-0">
+                                Forgot Password?
+                            </router-link>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn primary-btn w-100 mb-3">
+                        Sign In
+                    </button>
+
+                    <div class="primary-color d-flex justify-content-center">
+                        <span>Don't have an account?</span>
+                        <router-link to="/register" class="nav-link fw-bold">
+                            Sign Up
+                        </router-link>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </template>
+
+<script setup lang="ts">
+import router from '@/router'
+import { ref } from 'vue'
+
+const formData = ref({
+    email: '',
+    password: ''
+});
+
+const errors = ref({
+    email: null,
+    password: null
+});
+
+const validateEmail = (blur) => {
+    const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.value.email);
+    if (formData.value.email.length < 1) {
+        if(blur) errors.value.email = "Email cannot be empty.";
+    } else if (!isValidEmail) {
+        if(blur) errors.value.email = "Email is not valid.";
+    } else {
+        errors.value.email = null;
+    }
+};
+
+const validatePassword = (blur) => {
+    const password = formData.value.password;
+    const minLength = 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length < minLength) {
+        if (blur) errors.value.password = `Password must be at least ${minLength} characters long.`;
+    } else if (!hasUppercase) {
+        if (blur) errors.value.password = "Password must contain at least one uppercase letter.";
+    } else if (!hasLowercase) {
+        if (blur) errors.value.password = "Password must contain at least one lowercase letter.";
+    } else if (!hasNumber) {
+        if (blur) errors.value.password = "Password must contain at least one number.";
+    } else if (!hasSpecialChar) {
+        if (blur) errors.value.password = "Password must contain at least one special character.";
+    } else {
+        errors.value.password = null;
+    }
+};
+
+const handleLogin = () => {
+    validateEmail(true);
+    validatePassword(true);
+    if(!errors.value.email && !errors.value.password) {
+        console.log(formData.value);
+        clearForm();
+    }
+};
+
+const clearForm = () => {
+    formData.value = {
+        email: '',
+        password: ''
+    }
+};
+</script>
+
+<style scoped>
+.login-background {
+  background: url('@/assets/images/login_bg.png') no-repeat center center;
+  background-size: cover;
+}
+</style>
