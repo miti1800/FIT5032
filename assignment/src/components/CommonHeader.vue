@@ -17,25 +17,19 @@
     </div>
     
     <div id="menu" class="d-lg-flex align-items-center primary-color menu-options px-2 pb-lg-0 pb-3" :class="{ open: isMenuOpen }">
-        <a href="#" class="nav-link p-2">
+        <router-link to="/" class="nav-link p-2" active-class="active">
             Home
-        </a>
-        <a href="#" class="nav-link p-2">
-            Services
-        </a>
-        <a href="#" class="nav-link p-2">
-            About Us
-        </a>
-        <a href="#" class="nav-link fw-bold active p-2">
+        </router-link>
+        <router-link to="/contact-us" class="nav-link p-2" active-class="active">
             Contact Us
-        </a>
+        </router-link>
         <div class="d-flex align-items-center m-2 my-lg-0 mx-2">
-            <button class="btn primary-btn fw-semibold me-2">
+            <router-link to="/login" class="btn primary-btn fw-semibold me-3">
                 Login
-            </button>
-            <button class="btn primary-btn fw-semibold">
+            </router-link>
+            <router-link to="/register" class="btn primary-btn fw-semibold">
                 Register
-            </button>
+            </router-link>
         </div>
         
     </div>
@@ -44,6 +38,7 @@
 </template>
 
 <script setup>
+import router from '@/router';
 import { ref } from 'vue';
 
 const isMenuOpen = ref(false);
