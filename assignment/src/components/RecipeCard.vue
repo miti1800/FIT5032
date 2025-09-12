@@ -1,5 +1,5 @@
 <template>
-    <div class="card recipe-card h-100 p-4 primary-color m-2" @click="goToDetail">
+    <div class="card recipe-card h-100 p-4 primary-color mx-2 my-4" @click="goToDetail">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="mt-auto d-flex align-items-center">
                 <img :src="recipe.author.photo" :alt="recipe.author.name" class="avatar-btn avatar me-2">
@@ -8,7 +8,11 @@
                     <small>{{ recipe.posted_by }}</small>
                 </div>
             </div>
-            <i class="bi bi-bookmark-fill fs-5"></i>
+            <!-- <i class="bi bi-bookmark-fill fs-5"></i> -->
+            <div class="d-flex align-items-center">
+                <i class="bi bi-pencil-square fs-5 me-2"></i>
+                <i class="bi bi-trash-fill fs-5"></i>
+            </div>
         </div>
 
         <div class="position-relative">

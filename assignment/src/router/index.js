@@ -4,6 +4,7 @@ import ContactUsView from '@/views/ContactUsView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DashboardView from '@/views/user/DashboardView.vue'
+import AdminDashboard from '@/views/admin/AdminDashboard.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: DashboardView
+  },
+  {
+    path: '/admin/dashboard',
+    name: 'Admin Dashboard',
+    component: AdminDashboard
   }
 ]
 
