@@ -6,6 +6,7 @@
   --errorBg: #E8596333;
   --success: #388E3C;
   --successBg: #388E3C33;
+  --warning: #FFB800;
   --white: #fff
 }
 
@@ -42,6 +43,10 @@ body {
   background-color: var(--successBg);
   color: var(--success);
   border-radius: 8px;
+}
+
+.warning-color {
+  color: var(--warning);
 }
 
 .primary-bg {
@@ -129,8 +134,13 @@ body {
   transition: all 0.3s ease;
 }
 
-.form-control:focus {
+.input-group-text {
+  border: 2px solid var(--grayBg);
+}
+
+.form-control:focus, .input-group-text.focused {
   border-color: var(--primary);
+  color: var(--primary);
   box-shadow: 0 0 0 0.2rem rgba(40, 75, 99, 0.25);
   outline: none;
 }
@@ -159,44 +169,11 @@ body {
     border-bottom: 2px solid var(--primary);
 }
 
-.v3dp__datepicker {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  background-color: var(--white);
+.input-group-text {
+  background-color: var(--grayBg);
 }
 
-.v3dp__header {
-  background-color: var(--primary) !important;
-  color: var(--white) !important;
-  font-weight: 600;
-  padding: 0.5rem;
-  border-radius: 8px 8px 0 0;
-}
-
-.v3dp__arrow {
-  color: var(--secondary) !important;
-  transition: color 0.2s ease;
-}
-.v3dp__arrow:hover {
-  color: var(--primary) !important;
-}
-
-.v3dp__day {
-  border-radius: 8px;
-  transition: all 0.2s ease-in-out;
-}
-
-.v3dp__day:hover {
-  background-color: var(--secondary) !important;
-}
-
-.v3dp__day.v3dp__selected{
-  background-color: var(--primary) !important;
-  color: var(--secondary) !important;
-  font-weight: bold;
-}
-
-.v3dp__day.v3dp__disabled {
-  color: var(--graybg) !important;
-  cursor: not-allowed;
+.input-group-text.invalid {
+  background-color: var(--errorBg);
+  border: 2px solid var(--error);
 }

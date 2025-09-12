@@ -49,15 +49,30 @@
                         <label for="dob" class="form-label">
                             Date of Birth <span class="error-color">*</span>
                         </label>
-                        <Datepicker
-                            v-model="formData.dob"
-                            :upper-limit="new Date(new Date().setFullYear(new Date().getFullYear() - 18))"
-                            :lower-limit="new Date(new Date().setFullYear(new Date().getFullYear() - 118))"
-                            @blur="() => validateDob(true)"
-                            @input="() => validateDob(false)"
-                            class="form-control"
-                            :class="{ invalid: errors.dob != null }"
-                        />
+                        <div class="input-group">
+                            <div class="datepicker-input">
+                                <Datepicker
+                                    v-model="formData.dob"
+                                    placeholder="Select your date of birth"
+                                    :upper-limit="new Date(new Date().setFullYear(new Date().getFullYear() - 18))"
+                                    :lower-limit="new Date(new Date().setFullYear(new Date().getFullYear() - 118))"
+                                    @focus="isDobFocused = true"
+                                    @blur="isDobFocused = false; validateDob(true)"
+                                    @input="() => validateDob(false)"
+                                    class="form-control"
+                                    :class="{ invalid: errors.dob != null }"
+                                    style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
+                                />
+                            </div>
+                            <span class="input-group-text" 
+                                :class="[
+                                    { invalid: errors.dob != null },
+                                    { 'focused': isDobFocused }
+                                ]"
+                            >
+                                <i class="bi bi-calendar-event-fill primary-color" :class="{'error-color' : errors.dob != null }"></i>
+                            </span>
+                        </div>
                         <div v-if="errors.dob" class="error-box py-1 px-2 my-1 small d-flex align-items-center">
                             <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
                             {{ errors.dob }}
@@ -120,6 +135,8 @@
 import router from '@/router'
 import { ref } from 'vue'
 import Datepicker from 'vue3-datepicker'
+
+const isDobFocused = ref(false)
 
 const formData = ref({
     name: '',
@@ -227,5 +244,10 @@ const clearForm = () => {
 .login-background {
   background: url('@/assets/images/login_bg.png') no-repeat center center;
   background-size: cover;
+}
+
+.datepicker-input {
+  flex: 1 1 auto;
+  width: 1%;
 }
 </style>

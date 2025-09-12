@@ -1,0 +1,142 @@
+[
+  {
+    "id": "1",
+    "recipe_name": "Quinoa & Veggie Buddha Bowl",
+    "prep_time": 15,
+    "cook_time": 20,
+    "total_time": 35,
+    "servings": 2,
+    "ingredients": [
+      "1 cup cooked quinoa",
+      "1/2 cup chickpeas, roasted",
+      "1/2 cup broccoli florets, steamed",
+      "1/2 cup shredded carrots",
+      "1/4 avocado, sliced",
+      "2 tbsp tahini",
+      "1 tbsp lemon juice",
+      "Salt and pepper to taste",
+      "1 tsp olive oil"
+    ],
+    "directions": [
+      "Cook quinoa according to package instructions and set aside.",
+      "Roast chickpeas with olive oil, salt, and pepper at 400°F (200°C) for 15 minutes.",
+      "Steam broccoli florets until tender.",
+      "Assemble quinoa, roasted chickpeas, broccoli, carrots, and avocado in a bowl.",
+      "Drizzle with tahini and lemon juice.",
+      "Season with salt and pepper to taste.",
+      "Serve immediately."
+    ],
+    "rating": [4, 4.5, 3, 3.5, 3],
+    "url": "https://example.com/quinoa-veggie-bowl",
+    "cuisine_path": "Healthy",
+    "nutrition": {
+      "calories": 420,
+      "protein": "15g",
+      "carbs": "55g",
+      "fat": "16g",
+      "fiber": "12g"
+    },
+    "timing": {
+      "prep": "15 minutes",
+      "cook": "20 minutes",
+      "total": "35 minutes"
+    },
+    "author": {
+      "name": "Olivia Green",
+      "photo": "https://images.pexels.com/photos/3184199/pexels-photo-3184199.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
+    },
+    "image": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
+    "posted_by": "30 minutes ago"
+  },
+  {
+    "id": "2",
+    "recipe_name": "Avocado & Chickpea Salad",
+    "prep_time": 10,
+    "cook_time": 0,
+    "total_time": 10,
+    "servings": 2,
+    "ingredients": [
+      "1 cup chickpeas, drained",
+      "1 ripe avocado, diced",
+      "1/2 cup cherry tomatoes, halved",
+      "1/4 red onion, finely chopped",
+      "1 tbsp olive oil",
+      "1 tbsp lemon juice",
+      "Salt and pepper to taste",
+      "Fresh parsley for garnish"
+    ],
+    "directions": [
+      "In a large bowl, combine chickpeas, avocado, cherry tomatoes, and red onion.",
+      "Drizzle with olive oil and lemon juice.",
+      "Season with salt and pepper, then toss gently.",
+      "Garnish with fresh parsley.",
+      "Serve immediately or chill for 10 minutes."
+    ],
+    "rating": [4, 2.5, 4, 3.5, 3],
+    "url": "https://example.com/avocado-chickpea-salad",
+    "cuisine_path": "Healthy",
+    "nutrition": {
+      "calories": 310,
+      "protein": "10g",
+      "carbs": "30g",
+      "fat": "18g",
+      "fiber": "9g"
+    },
+    "timing": {
+      "prep": "10 minutes",
+      "cook": "0 minutes",
+      "total": "10 minutes"
+    },
+    "author": {
+      "name": "Emma Stone",
+      "photo": "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
+    },
+    "image": "https://cookingwithayeh.com/wp-content/uploads/2020/11/Chickpea-Salad-1.jpg",
+    "posted_by": "1 hour ago"
+  },
+  {
+    "id": "3",
+    "recipe_name": "Grilled Salmon with Asparagus",
+    "prep_time": 10,
+    "cook_time": 15,
+    "total_time": 25,
+    "servings": 2,
+    "ingredients": [
+      "2 salmon fillets (6 oz each)",
+      "1 bunch asparagus, trimmed",
+      "1 tbsp olive oil",
+      "1 tbsp lemon juice",
+      "1 tsp garlic powder",
+      "Salt and pepper to taste"
+    ],
+    "directions": [
+      "Preheat grill or oven to 400°F (200°C).",
+      "Brush salmon fillets and asparagus with olive oil.",
+      "Season with garlic powder, salt, and pepper.",
+      "Grill salmon for 6-8 minutes per side or bake in oven for 12-15 minutes.",
+      "Grill or roast asparagus for 8-10 minutes until tender.",
+      "Drizzle salmon and asparagus with lemon juice before serving."
+    ],
+    "rating": [5, 4.5, 3.5, 4, 3.5],
+    "url": "https://example.com/grilled-salmon-asparagus",
+    "cuisine_path": "Healthy",
+    "nutrition": {
+      "calories": 350,
+      "protein": "35g",
+      "carbs": "10g",
+      "fat": "20g",
+      "fiber": "4g"
+    },
+    "timing": {
+      "prep": "10 minutes",
+      "cook": "15 minutes",
+      "total": "25 minutes"
+    },
+    "author": {
+      "name": "Liam Brown",
+      "photo": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
+    },
+    "image": "https://img.taste.com.au/DC9jNKIB/w720-h480-cfill-q80/taste/2016/11/chargrilled-salmon-with-asparagus-in-lime-vinaigrette-59335-1.jpeg",
+    "posted_by": "6 hours ago"
+  }
+]
