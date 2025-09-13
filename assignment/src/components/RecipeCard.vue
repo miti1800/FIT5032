@@ -8,10 +8,12 @@
                     <small>{{ recipe.posted_by }}</small>
                 </div>
             </div>
-            <!-- <i class="bi bi-bookmark-fill fs-5"></i> -->
-            <div class="d-flex align-items-center">
-                <i class="bi bi-pencil-square fs-5 me-2"></i>
-                <i class="bi bi-trash-fill fs-5"></i>
+            <div v-if="isAdmin" class="d-flex align-items-center">
+              <i class="bi bi-pencil-square fs-4 me-2"></i>
+              <i class="bi bi-trash-fill fs-4"></i>
+            </div>
+            <div v-else>
+              <i class="bi bi-bookmark-fill fs-4"></i>
             </div>
         </div>
 
@@ -26,18 +28,9 @@
         </div>
         
         <div class="d-flex flex-column">
-            <div class="d-flex align-items-center my-3">
-                <div class="stars me-2">
-                    <i 
-                        v-for="star in 5" 
-                        :key="star"
-                        class="bi"
-                        :class="star <= Math.floor(averageRating) ? 'bi-star-fill' : star <= averageRating ? 'bi-star-half' : 'bi-star'"
-                    ></i>
-                </div>
-                <span>{{ averageRating }} ({{ recipe.servings }} servings)</span>
+            <div class="my-3">
+              <Rating :ratings="recipe.rating" />
             </div>
-
             <div class="recipe-stats p-3">
                 <div class="row text-center">
                     <div class="col-4">
@@ -63,10 +56,18 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import Rating from './Rating.vue';
+
+const router = useRouter();
 
 const props = defineProps({
   recipe: {
     type: Object,
+    required: true
+  },
+  isAdmin: {
+    type: Boolean,
     required: true
   }
 });
@@ -77,6 +78,10 @@ const averageRating = computed(() => {
   const total = ratings.reduce((sum, r) => sum + r, 0)
   return (total / ratings.length).toFixed(1)
 });
+
+const goToDetail = () => {
+  router.push({ name: 'RecipeDetailView', params: { id: props.recipe.id } })
+};
 </script>
 
 <style scoped>

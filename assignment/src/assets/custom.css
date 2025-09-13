@@ -7,6 +7,7 @@
   --success: #388E3C;
   --successBg: #388E3C33;
   --warning: #FFB800;
+  --warningBg: #FFB80033;
   --white: #fff
 }
 
@@ -47,6 +48,14 @@ body {
 
 .warning-color {
   color: var(--warning);
+}
+
+.warning-box {
+  display: flex;
+  align-items: center;
+  background-color: var(--warningBg);
+  color: var(--warning);
+  border-radius: 8px;
 }
 
 .primary-bg {
@@ -153,6 +162,13 @@ body {
   box-shadow: 0 4px 12px rgba(202, 210, 197, 0.6);
   border-radius: 8px;
   border: none;
+}
+
+.card-header {
+  background-color: var(--primary);
+  color: var(--secondary);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .nav-link {

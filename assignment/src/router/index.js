@@ -5,6 +5,7 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DashboardView from '@/views/user/DashboardView.vue'
 import AdminDashboard from '@/views/admin/AdminDashboard.vue'
+import RecipeDetailView from '@/views/user/RecipeDetailView.vue'
 
 const routes = [
   {
@@ -36,6 +37,12 @@ const routes = [
     path: '/admin/dashboard',
     name: 'Admin Dashboard',
     component: AdminDashboard
+  },
+  {
+    path: '/recipe/:id',
+    name: 'RecipeDetailView',
+    component: RecipeDetailView,
+    props: true
   }
 ]
 
