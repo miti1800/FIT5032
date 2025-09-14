@@ -24,6 +24,10 @@ body {
   color: var(--secondary);
 }
 
+.gray-color {
+  color: var(--grayBg);
+}
+
 .error-color {
   color: var(--error);
 }
@@ -69,6 +73,7 @@ body {
   border: 2px solid var(--primary);
   border-radius: 8px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .primary-btn:hover {
@@ -77,9 +82,14 @@ body {
   border: 2px solid var(--primary);
 }
 
+.secondary-bg {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
 .secondary-btn {
   color: var(--primary);
-  background-color: var(--secondary);
+  background-color: transparent;
   border: 2px solid var(--primary);
   border-radius: 8px;
   font-weight: bold;
@@ -88,7 +98,6 @@ body {
 .secondary-btn:hover {
   color: var(--secondary);
   background-color: var(--primary);
-  border: 2px solid var(--secondary);
 }
 
 .custom-table .p-datatable-thead > tr > th {

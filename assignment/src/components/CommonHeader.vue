@@ -1,5 +1,5 @@
 <template>
-  <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow">
+  <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow header">
     <div class="d-flex align-items-center"> 
         <h3 class="mb-0 fw-bold primary-color">
             <i class="bi bi-leaf-fill fs-3 primary-color"></i>   
@@ -49,13 +49,19 @@ const toggleMenu = () => {
 </script>
 
 <style scoped>
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
 @media (max-width: 992px) {
     .menu-options {
         flex-direction: column;
         align-items: start !important;
         background: var(--white);
         position: absolute;
-        top: 11%;
+        top: 100%;
         left: 0%;
         width: 100%;
         transform: translateY(-60px);

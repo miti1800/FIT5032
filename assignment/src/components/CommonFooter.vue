@@ -57,7 +57,7 @@
         <div class="col-lg-2 col-md-12">
           <h5 class="py-1 mb-3 fw-semibold">Get Involved</h5>
           <div class="mb-3">
-            <button class="btn secondary-btn fw-medium mx-0 px-5">
+            <button class="btn primary-btn fw-medium mx-0 px-5">
               Sign-Up
             </button>
           </div>

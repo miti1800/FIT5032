@@ -8,6 +8,7 @@ import AdminDashboard from '@/views/admin/AdminDashboard.vue'
 import RecipeDetailView from '@/views/user/RecipeDetailView.vue'
 import { useUserStore } from '@/stores/user'
 import UserManagement from '@/views/admin/UserManagement.vue'
+import PageNotFoundView from '@/views/PageNotFoundView.vue'
 
 const routes = [
   {
@@ -54,6 +55,11 @@ const routes = [
     component: RecipeDetailView,
     props: true,
     meta: { requiresAuth: true, roles: ['user', 'admin'] }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: PageNotFoundView
   }
 ];
 
@@ -63,8 +69,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const userStore = useUserStore()
-  const user = userStore.currentUser
+  const userStore = useUserStore();
 
   if (to.meta.requiresAuth) {
     if (!userStore.currentUser) {
@@ -72,7 +77,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.meta.roles && !to.meta.roles.includes(userStore.currentUser.role)) {
-      return next({ name: user.role === 'admin' ? 'AdminDashboard' : 'Dashboard' })
+      return next({ name: userStore.currentUser.role === 'admin' ? 'AdminDashboard' : 'Dashboard' })
     }
   }
   

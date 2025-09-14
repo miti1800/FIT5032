@@ -5,7 +5,7 @@
     "last_name": "Doe",
     "date_of_birth": "12-04-1995",
     "email": "john.doe@example.com",
-    "password": "Password@123",
+    "password": "John@123",
     "date_joined": "15-01-2023",
     "role": "user"
   },

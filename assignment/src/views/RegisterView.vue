@@ -96,14 +96,26 @@
                         <label for="password" class="form-label primary-color">
                             Create Password <span class="error-color">*</span>
                         </label>
-                        <input type="password" class="form-control" id="password" placeholder="Create your password"
-                            @blur="() => validatePassword(true)"
-                            @input="() => validatePassword(false)"
-                            v-model="formData.password"
-                            :class="{
-                                invalid: errors.password != null
-                            }"
-                        />
+                        <div style="position: relative;">
+                            <input
+                                :type="showPassword ? 'text' : 'password'"
+                                class="form-control"
+                                id="password"
+                                placeholder="Enter your password"
+                                @blur="() => validatePassword(true)"
+                                @input="() => validatePassword(false)"
+                                v-model="formData.password"
+                                :class="{ invalid: errors.password != null }"
+                            />
+                            <button
+                                type="button"
+                                class="btn showPassword-btn"
+                                @click="togglePassword"
+                                :class="{ invalid: errors.password != null }"
+                            >
+                                <i :class="showPassword ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill'"></i>
+                            </button>
+                        </div>
                         <div v-if="errors.password" class="error-box py-1 px-2 my-1 small d-flex align-items-center">
                             <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
                             {{ errors.password }}
@@ -111,18 +123,29 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="confirm-password" class="form-label">
+                        <label for="confirmPassword" class="form-label">
                             Confirm password
                             <span class="error-color">*</span>
                         </label>
-                        <input
-                            type="password"
-                            class="form-control"
-                            id="confirm-password"
-                            placeholder="Confirm your password"
-                            @blur="() => validateConfirmPassword(true)"
-                            v-model="formData.confirmPassword"
-                        />
+                        <div style="position: relative;">
+                            <input
+                                :type="showConfirmPassword ? 'text' : 'password'"
+                                class="form-control"
+                                id="confirmPassword"
+                                placeholder="Enter your password"
+                                @blur="() => validateConfirmPassword(true)"
+                                v-model="formData.confirmPassword"
+                                :class="{ invalid: errors.confirmPassword != null }"
+                            />
+                            <button
+                                type="button"
+                                class="btn showPassword-btn"
+                                @click="toggleConfirmPassword"
+                                :class="{ invalid: errors.confirmPassword != null }"
+                            >
+                                <i :class="showConfirmPassword ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill'"></i>
+                            </button>
+                        </div>
                         <div v-if="errors.confirmPassword" class="text-danger">
                             {{ errors.confirmPassword }}
                         </div>
@@ -157,6 +180,18 @@ import { useUserStore } from '@/stores/user';
 const userStore = useUserStore();
 
 const isDobFocused = ref(false)
+
+const showPassword = ref(false);
+
+const togglePassword = () => {
+  showPassword.value = !showPassword.value;
+};
+
+const showConfirmPassword = ref(false);
+
+const toggleConfirmPassword = () => {
+  showConfirmPassword.value = !showConfirmPassword.value;
+};
 
 const formData = ref({
     firstName: '',

@@ -1,5 +1,5 @@
 <template>
-  <header class="d-flex justify-content-between align-items-center px-1 px-sm-3 p-3 bg-white shadow">
+  <header class="d-flex justify-content-between align-items-center px-1 px-sm-3 p-3 bg-white shadow header">
     <div class="d-flex align-items-center">
         <button
             class="icon-btn hamburger primary-color"
@@ -65,6 +65,12 @@ const logout = () => {
 </script>
 
 <style scoped>
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
 .hamburger, .avatar-btn {
   background: transparent;
 }
