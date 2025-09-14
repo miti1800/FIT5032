@@ -35,26 +35,26 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: DashboardView,
-    meta: { requiresAuth: true, roles: ['user'] }
+    meta: { requiresAuth: true, roles: ["user"] }
   },
   {
     path: '/admin/dashboard',
     name: 'Admin Dashboard',
     component: AdminDashboard,
-    meta: { requiresAuth: true, roles: ['admin'] }
+    meta: { requiresAuth: true, roles: ["admin"] }
   },
   {
     path: '/admin/user-management',
     name: 'User Management',
     component: UserManagement,
-    meta: { requiresAuth: true, roles: ['admin'] }
+    meta: { requiresAuth: true, roles: ["admin"] }
   },
   {
     path: '/recipe/:id',
     name: 'RecipeDetailView',
     component: RecipeDetailView,
     props: true,
-    meta: { requiresAuth: true, roles: ['user', 'admin'] }
+    meta: { requiresAuth: true, roles: ["user", "admin"] }
   },
   {
     path: '/:pathMatch(.*)*',
@@ -77,7 +77,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.meta.roles && !to.meta.roles.includes(userStore.currentUser.role)) {
-      return next({ name: userStore.currentUser.role === 'admin' ? 'AdminDashboard' : 'Dashboard' })
+      return next({ name: userStore.currentUser.role === "admin" ? 'AdminDashboard' : 'Dashboard' })
     }
   }
   

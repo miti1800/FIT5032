@@ -176,6 +176,7 @@ import { ref } from 'vue'
 import Datepicker from 'vue3-datepicker';
 import users from '@/assets/json/users.json';
 import { useUserStore } from '@/stores/user';
+import DOMPurify from 'dompurify'
 
 const userStore = useUserStore();
 
@@ -302,13 +303,14 @@ const handleRegistration = () => {
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const year = today.getFullYear();
 
+
         const newUserObj = {
             user_id: users.length + 1,
-            first_name: formData.value.firstName,
-            last_name: formData.value.lastName,
-            email: formData.value.email,
-            date_of_birth: formData.value.dob,
-            password: formData.value.password,
+            first_name: DOMPurify.sanitize(formData.value.firstName),
+            last_name: DOMPurify.sanitize(formData.value.lastName),
+            email: DOMPurify.sanitize(formData.value.email),
+            date_of_birth: DOMPurify.sanitize(formData.value.dob),
+            password: DOMPurify.sanitize(formData.value.password),
             date_joined: `${day}-${month}-${year}`,
             role: "user"
         };

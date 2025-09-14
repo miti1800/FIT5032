@@ -26,8 +26,8 @@
       "Season with salt and pepper to taste.",
       "Serve immediately."
     ],
-    "rating": [4, 5, 3, 4, 3],
-    "user_id": [1, 2, 3, 4, 5],
+    "rating": [4, 5],
+    "user_id": [3, 4],
     "url": "https://example.com/quinoa-veggie-bowl",
     "cuisine_path": "Healthy",
     "nutrition": {
@@ -73,8 +73,8 @@
       "Garnish with fresh parsley.",
       "Serve immediately or chill for 10 minutes."
     ],
-    "rating": [4, 3, 4, 4, 3],
-    "user_id": [1, 2, 3, 4, 5],
+    "rating": [4],
+    "user_id": [3],
     "url": "https://example.com/avocado-chickpea-salad",
     "cuisine_path": "Healthy",
     "nutrition": {
@@ -119,8 +119,8 @@
       "Grill or roast asparagus for 8-10 minutes until tender.",
       "Drizzle salmon and asparagus with lemon juice before serving."
     ],
-    "rating": [5, 5, 4, 4, 3],
-    "user_id": [1, 2, 3, 4, 5],
+    "rating": [],
+    "user_id": [],
     "url": "https://example.com/grilled-salmon-asparagus",
     "cuisine_path": "Healthy",
     "nutrition": {

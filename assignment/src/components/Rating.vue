@@ -19,7 +19,15 @@
         </div>
         
         <span v-if="!interactive" class="rating-text">
-            {{ averageRating.toFixed(1) }} ({{ totalRatings }} {{ totalRatings === 1 ? 'rating' : 'ratings' }})
+            {{ averageRating.toFixed(1) }} (
+              <template v-if="totalRatings != 0">
+                {{ totalRatings }} {{ totalRatings === 1 ? 'rating' : 'ratings' }}
+              </template>
+            
+              <template v-else>
+                  Be the first to rate!
+              </template>
+            )
         </span>
     </div>
 </template>
