@@ -78,7 +78,7 @@ body {
 
 .primary-btn:hover {
   color: var(--primary);
-  background-color: var(--secondary);
+  background-color: transparent;
   border: 2px solid var(--primary);
 }
 
