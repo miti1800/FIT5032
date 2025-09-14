@@ -6,6 +6,8 @@ import RegisterView from '@/views/RegisterView.vue'
 import DashboardView from '@/views/user/DashboardView.vue'
 import AdminDashboard from '@/views/admin/AdminDashboard.vue'
 import RecipeDetailView from '@/views/user/RecipeDetailView.vue'
+import { useUserStore } from '@/stores/user'
+import UserManagement from '@/views/admin/UserManagement.vue'
 
 const routes = [
   {
@@ -31,24 +33,50 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: DashboardView
+    component: DashboardView,
+    meta: { requiresAuth: true, roles: ['user'] }
   },
   {
     path: '/admin/dashboard',
     name: 'Admin Dashboard',
-    component: AdminDashboard
+    component: AdminDashboard,
+    meta: { requiresAuth: true, roles: ['admin'] }
+  },
+  {
+    path: '/admin/user-management',
+    name: 'User Management',
+    component: UserManagement,
+    meta: { requiresAuth: true, roles: ['admin'] }
   },
   {
     path: '/recipe/:id',
     name: 'RecipeDetailView',
     component: RecipeDetailView,
-    props: true
+    props: true,
+    meta: { requiresAuth: true, roles: ['user', 'admin'] }
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes
-})
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+  const user = userStore.currentUser
+
+  if (to.meta.requiresAuth) {
+    if (!userStore.currentUser) {
+      return next({ name: 'Login' })
+    }
+
+    if (to.meta.roles && !to.meta.roles.includes(userStore.currentUser.role)) {
+      return next({ name: user.role === 'admin' ? 'AdminDashboard' : 'Dashboard' })
+    }
+  }
+  
+  next();
+});
+
+export default router;

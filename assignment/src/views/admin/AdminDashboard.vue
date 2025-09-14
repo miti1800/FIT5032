@@ -1,4 +1,5 @@
 <template>
+    <AuthenticatedHeader />
     <div class="px-4 pt-3 m-2 primary-color">
         <div class="d-flex align-items-center fw-lighter">Admin > &nbsp;
             <p class="fw-normal text-decoration-underline mb-0">Dashboard</p>
@@ -55,10 +56,13 @@
             />
         </div>
     </div>
+    <AuthenticatedFooter />
 </template>
 
 <script setup>
 import StatsCard from '@/components/StatsCard.vue';
 import RecipeCard from '@/components/RecipeCard.vue';
 import recipes from '@/assets/json/recipes.json';
+import AuthenticatedHeader from '@/components/AuthenticatedHeader.vue';
+import AuthenticatedFooter from '@/components/AuthenticatedFooter.vue';
 </script>

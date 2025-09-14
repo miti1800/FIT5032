@@ -1,7 +1,12 @@
 <template>
+    <AuthenticatedHeader />
+    
     <div v-if="recipe">
         <div class="px-4 py-3 m-2 primary-color">
-            <div class="d-flex align-items-center fw-lighter">User > Recipes > &nbsp; 
+            <div class="d-flex align-items-center fw-lighter">
+                <span v-if="isAdmin">Admin</span>
+                <span v-else>User</span>
+                &nbsp; > Recipes > &nbsp;
                 <p class="fw-normal text-decoration-underline mb-0">{{recipe.recipe_name}}</p>
             </div>
         </div>
@@ -180,6 +185,8 @@
     <div v-else class="text-center py-5">
         <p>Loading recipe details...</p>
     </div>
+
+    <AuthenticatedFooter />
 </template>
 
 <script setup>
@@ -187,6 +194,10 @@ import { ref, onMounted } from 'vue';
 import recipes from '@/assets/json/recipes.json';
 import { useRoute } from 'vue-router';
 import Rating from '@/components/Rating.vue';
+import AuthenticatedHeader from '@/components/AuthenticatedHeader.vue';
+import AuthenticatedFooter from '@/components/AuthenticatedFooter.vue';
+import { useUserStore } from '@/stores/user';
+const userStore = useUserStore();
 
 const props = defineProps({
     id: {
@@ -195,8 +206,7 @@ const props = defineProps({
     }
 });
 
-const currentUser = 6;
-const isAdmin = ref(false);
+const isAdmin = (userStore.currentUser.role === "admin");
 
 const recipe = ref(null);
 const route = useRoute();
@@ -204,16 +214,16 @@ const route = useRoute();
 const hasUserRated = ref(false);
 
 onMounted(() => {
-    const recipeId = props.id || route.params.id
+    const recipeId = props.id || route.params.id;
     recipe.value = recipes.find(r => r.id === recipeId)
-    hasUserRated.value = recipe.value.user_id.includes(currentUser);
+    hasUserRated.value = recipe.value.user_id.includes(userStore.currentUser.user_id);
 });
 
 const handleRatingAdded = (rating) => {
     hasUserRated.value = true
     if (recipe.value) {
         recipe.value.rating.push(rating)
-        recipe.value.user_id.push(currentUser)
+        recipe.value.user_id.push(userStore.currentUser.user_id)
     }
     console.log(`User rated the recipe: ${rating} stars`);
 }

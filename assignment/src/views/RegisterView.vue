@@ -1,4 +1,5 @@
 <template>
+    <CommonHeader />
     <div class="d-flex align-items-center login-background min-vh-100 primary-color py-5">
         <div class="col-md-6"></div>
         <div class="col-md-6 d-flex justify-content-center">
@@ -10,20 +11,38 @@
 
                 <form @submit.prevent="handleRegistration" class="mb-2">
                     <div class="mb-3">
-                        <label for="name" class="form-label">
-                            Name <span class="error-color">*</span>
+                        <label for="firstName" class="form-label">
+                            First Name <span class="error-color">*</span>
                         </label>
-                        <input type="name" class="form-control" id="name" placeholder="Enter your name"
-                            @blur="() => validateName(true)"
-                            @input="() => validateName(false)"
-                            v-model="formData.name"
+                        <input type="text" class="form-control" id="firstName" placeholder="Enter your first name"
+                            @blur="() => validateFirstName(true)"
+                            @input="() => validateFirstName(false)"
+                            v-model="formData.firstName"
                             :class="{
-                                invalid: errors.name != null
+                                invalid: errors.firstName != null
                             }"
                         />
-                        <div v-if="errors.name" class="error-box py-1 px-2 my-1 small d-flex align-items-center">
+                        <div v-if="errors.firstName" class="error-box py-1 px-2 my-1 small d-flex align-items-center">
                             <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
-                            {{ errors.name }}
+                            {{ errors.firstName }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">
+                            Last Name <span class="error-color">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="lastName" placeholder="Enter your last name"
+                            @blur="() => validateLastName(true)"
+                            @input="() => validateLastName(false)"
+                            v-model="formData.lastName"
+                            :class="{
+                                invalid: errors.lastName != null
+                            }"
+                        />
+                        <div v-if="errors.lastName" class="error-box py-1 px-2 my-1 small d-flex align-items-center">
+                            <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
+                            {{ errors.lastName }}
                         </div>
                     </div>
 
@@ -49,26 +68,20 @@
                         <label for="dob" class="form-label">
                             Date of Birth <span class="error-color">*</span>
                         </label>
-                        <div class="input-group">
-                            <div class="datepicker-input">
-                                <Datepicker
-                                    v-model="formData.dob"
-                                    placeholder="Select your date of birth"
-                                    :upper-limit="new Date(new Date().setFullYear(new Date().getFullYear() - 18))"
-                                    :lower-limit="new Date(new Date().setFullYear(new Date().getFullYear() - 118))"
-                                    @focus="isDobFocused = true"
-                                    @blur="isDobFocused = false; validateDob(true)"
-                                    @input="() => validateDob(false)"
-                                    class="form-control"
-                                    :class="{ invalid: errors.dob != null }"
-                                    style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
-                                />
-                            </div>
-                            <span class="input-group-text" 
-                                :class="[
-                                    { invalid: errors.dob != null },
-                                    { 'focused': isDobFocused }
-                                ]"
+                        <div style="position: relative;">
+                            <Datepicker
+                                v-model="formData.dob"
+                                placeholder="Select your date of birth"
+                                :upper-limit="new Date(new Date().setFullYear(new Date().getFullYear() - 18))"
+                                :lower-limit="new Date(new Date().setFullYear(new Date().getFullYear() - 118))"
+                                @focus="isDobFocused = true"
+                                @blur="isDobFocused = false; validateDob(true)"
+                                @input="() => validateDob(false)"
+                                class="form-control"
+                                :class="{ invalid: errors.dob != null }"
+                            />
+                            <span class="btn showPassword-btn" 
+                                :class="{invalid: errors.dob != null}"
                             >
                                 <i class="bi bi-calendar-event-fill primary-color" :class="{'error-color' : errors.dob != null }"></i>
                             </span>
@@ -129,17 +142,25 @@
             </div>
         </div>
     </div>
+    <CommonFooter />
 </template>
 
-<script setup lang="ts">
+<script setup>
+import CommonFooter from '@/components/CommonFooter.vue';
+import CommonHeader from '@/components/CommonHeader.vue';
 import router from '@/router'
 import { ref } from 'vue'
-import Datepicker from 'vue3-datepicker'
+import Datepicker from 'vue3-datepicker';
+import users from '@/assets/json/users.json';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore();
 
 const isDobFocused = ref(false)
 
 const formData = ref({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     dob: null,
     password: '',
@@ -147,31 +168,47 @@ const formData = ref({
 });
 
 const errors = ref({
-    name: null,
+    firstName: null,
+    lastName: null,
     email: null,
     dob: null,
     password: null,
     confirmPassword: null
 });
 
-const validateName = (blur) => {
-    const name = formData.value.name.trim();
+const validateFirstName = (blur) => {
+    const name = formData.value.firstName.trim();
     const isValidName = /^[A-Za-z\s]+$/.test(name)
     if (name.length < 1) {
-        if (blur) errors.value.name = 'Name cannot be empty.'
+        if (blur) errors.value.firstName = 'Name cannot be empty.'
     } else if(!isValidName) {
-        if (blur) errors.value.name = 'Name should only contain letters and spaces.'
+        if (blur) errors.value.firstName = 'Name should only contain letters and spaces.'
     } else {
-        errors.value.name = null
+        errors.value.firstName = null
+    }
+};
+
+const validateLastName = (blur) => {
+    const name = formData.value.lastName.trim();
+    const isValidName = /^[A-Za-z\s]+$/.test(name)
+    if (name.length < 1) {
+        if (blur) errors.value.lastName = 'Name cannot be empty.'
+    } else if(!isValidName) {
+        if (blur) errors.value.lastName = 'Name should only contain letters and spaces.'
+    } else {
+        errors.value.lastName = null
     }
 };
 
 const validateEmail = (blur) => {
     const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.value.email);
+    const exists = users.some(user => user.email === formData.value.email);
     if (formData.value.email.length < 1) {
         if(blur) errors.value.email = "Email cannot be empty.";
     } else if (!isValidEmail) {
         if(blur) errors.value.email = "Email is not valid.";
+    } else if (exists) {
+        if(blur) errors.value.email = "Email already registered.";
     } else {
         errors.value.email = null;
     }
@@ -218,20 +255,39 @@ const validateConfirmPassword = (blur) => {
 };
 
 const handleRegistration = () => {
-    validateName(true);
+    validateFirstName(true);
+    validateLastName(true);
     validateEmail(true);
     validateDob(true);
     validatePassword(true);
     validateConfirmPassword(true);
-    if(!errors.value.email && !errors.value.password && !errors.value.name && !errors.value.confirmPassword && !errors.value.dob) {
-        console.log(formData.value);
+    if(!errors.value.email && !errors.value.password && !errors.value.firstName && !errors.value.lastName && !errors.value.confirmPassword && !errors.value.dob) {
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+
+        const newUserObj = {
+            user_id: users.length + 1,
+            first_name: formData.value.firstName,
+            last_name: formData.value.lastName,
+            email: formData.value.email,
+            date_of_birth: formData.value.dob,
+            password: formData.value.password,
+            date_joined: `${day}-${month}-${year}`,
+            role: "user"
+        };
+        users.push(newUserObj);
+        userStore.setUser(newUserObj);
+        router.push({ name: 'Dashboard' });
         clearForm();
     }
 };
 
 const clearForm = () => {
     formData.value = {
-        name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         dob: null,
         password: '',
@@ -244,10 +300,5 @@ const clearForm = () => {
 .login-background {
   background: url('@/assets/images/login_bg.png') no-repeat center center;
   background-size: cover;
-}
-
-.datepicker-input {
-  flex: 1 1 auto;
-  width: 1%;
 }
 </style>

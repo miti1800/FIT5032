@@ -57,7 +57,10 @@
 <script setup>
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
+import users from '@/assets/json/users.json';
 import Rating from './Rating.vue';
+import { useUserStore } from '@/stores/user';
+const userStore = useUserStore();
 
 const router = useRouter();
 
@@ -65,12 +68,10 @@ const props = defineProps({
   recipe: {
     type: Object,
     required: true
-  },
-  isAdmin: {
-    type: Boolean,
-    required: true
   }
 });
+
+const isAdmin = (userStore.currentUser.role === "admin");
 
 const averageRating = computed(() => {
   const ratings = props.recipe.rating || []
@@ -80,7 +81,7 @@ const averageRating = computed(() => {
 });
 
 const goToDetail = () => {
-  router.push({ name: 'RecipeDetailView', params: { id: props.recipe.id } })
+  router.push({ name: 'RecipeDetailView', params: { id: props.recipe.id } });
 };
 </script>
 

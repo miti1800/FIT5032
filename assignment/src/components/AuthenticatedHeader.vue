@@ -12,7 +12,7 @@
         </h3>
     </div>
     
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center" style="position: relative;">
         <div class="px-3">
             <button
                 class="icon-btn primary-color"
@@ -22,15 +22,46 @@
         </div>
         <button
             class="avatar-btn primary-color"
+            @click="toggleDropdown"
         >
             <img :src="profile" alt="profile" class="avatar"/>
         </button>
+
+        <div v-if="dropdownOpen" class="dropdown-menu-custom shadow-lg">
+            <div class="px-3 py-2 border-bottom">
+                <strong>{{ userStore.currentUser.first_name }} {{ userStore.currentUser.last_name }}</strong>
+            </div>
+            <small class="dropdown-item">
+                <i class="bi bi-gear-fill me-2"></i>
+                Settings
+            </small>
+            <button class="dropdown-item small" @click="logout">
+                <i class="bi bi-box-arrow-right me-2"></i> Logout
+            </button>
+        </div>
     </div>
   </header>
 </template>
 
 <script setup>
-import profile from '@/assets/images/profile.jpg'
+import { ref } from 'vue';
+import profile from '@/assets/images/profile.jpg';
+import users from '@/assets/json/users.json';
+import router from '@/router';
+import { useUserStore } from '@/stores/user'
+const userStore = useUserStore();
+
+const dropdownOpen = ref(false);
+
+const toggleDropdown = () => {
+    dropdownOpen.value = !dropdownOpen.value
+};
+
+const logout = () => {
+    dropdownOpen.value = false;
+    userStore.logout();
+    router.push({ name: 'Login'});
+};
 </script>
 
 <style scoped>
@@ -43,5 +74,31 @@ import profile from '@/assets/images/profile.jpg'
   height: 38px;
   border-radius: 8px;
   object-fit: cover;
+}
+
+.dropdown-menu-custom {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  min-width: 200px;
+  background: var(--white);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: var(--secondary);
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+    <AuthenticatedHeader />
     <div class="px-4 pt-3 m-2 primary-color">
         <div class="d-flex align-items-center fw-lighter">User > &nbsp;
             <p class="fw-normal text-decoration-underline mb-0">Dashboard</p>
@@ -51,14 +52,16 @@
                 v-for="recipe in recipes" 
                 :key="recipe.id" 
                 :recipe="recipe"
-                :isAdmin=false
             />
         </div>
     </div>
+    <AuthenticatedFooter />
 </template>
 
 <script setup>
 import StatsCard from '@/components/StatsCard.vue';
 import RecipeCard from '@/components/RecipeCard.vue';
 import recipes from '@/assets/json/recipes.json';
+import AuthenticatedHeader from '@/components/AuthenticatedHeader.vue';
+import AuthenticatedFooter from '@/components/AuthenticatedFooter.vue';
 </script>

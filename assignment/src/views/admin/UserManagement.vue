@@ -1,4 +1,5 @@
 <template>
+    <AuthenticatedHeader />
     <div class="px-4 py-3 m-2 primary-color">
         <div class="d-flex align-items-center fw-lighter">Admin > &nbsp;
             <p class="fw-normal text-decoration-underline mb-0">Users</p>
@@ -30,12 +31,15 @@
             </Column>
         </DataTable>
     </div>
+    <AuthenticatedFooter />
 </template>
 
 <script setup>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import users from '../../assets/json/users.json';
+import AuthenticatedHeader from '@/components/AuthenticatedHeader.vue';
+import AuthenticatedFooter from '@/components/AuthenticatedFooter.vue';
 </script>
 
 <style scoped>

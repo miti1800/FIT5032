@@ -154,6 +154,17 @@ body {
   outline: none;
 }
 
+.showPassword-btn {
+  position: absolute;
+  top: 5%;
+  right: 0%;
+  color: var(--primary);
+}
+
+.showPassword-btn.invalid {
+  color: var(--error);
+}
+
 .form-control.invalid {
   border-color: var(--error);
 }

@@ -9,8 +9,6 @@ import AuthenticatedFooter from './components/AuthenticatedFooter.vue';
 <template class="bg-light">
   <div class="d-flex flex-column min-vh-100">
     <Toast />
-    <AuthenticatedHeader />
     <router-view></router-view>
-    <AuthenticatedFooter />
   </div>
 </template>
