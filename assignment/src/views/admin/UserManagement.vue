@@ -31,7 +31,7 @@
             </Column>
         </DataTable>
     </div>
-    <AuthenticatedFooter />
+    <Footer />
 </template>
 
 <script setup>
@@ -39,7 +39,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import users from '../../assets/json/users.json';
 import AuthenticatedHeader from '@/components/AuthenticatedHeader.vue';
-import AuthenticatedFooter from '@/components/AuthenticatedFooter.vue';
+import Footer from '@/components/Footer.vue';
 </script>
 
 <style scoped>

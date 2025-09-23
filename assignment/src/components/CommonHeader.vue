@@ -2,7 +2,7 @@
   <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow header">
     <div class="d-flex align-items-center"> 
         <h3 class="mb-0 fw-bold primary-color">
-            <i class="bi bi-leaf-fill fs-3 primary-color"></i>   
+            <img :src="logo" alt="App logo" class="app-logo"/> 
             NutriED
         </h3>
     </div>
@@ -40,6 +40,7 @@
 <script setup>
 import router from '@/router';
 import { ref } from 'vue';
+import logo from '@/assets/images/logo.png';
 
 const isMenuOpen = ref(false);
 
@@ -53,6 +54,10 @@ const toggleMenu = () => {
     position: sticky;
     top: 0;
     z-index: 100;
+}
+
+.app-logo {
+    height: 35px;
 }
 
 @media (max-width: 992px) {

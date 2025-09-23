@@ -169,7 +169,7 @@
 </template>
 
 <script setup>
-import CommonFooter from '@/components/CommonFooter.vue';
+import CommonFooter from '@/components/Footer.vue';
 import CommonHeader from '@/components/CommonHeader.vue';
 import router from '@/router'
 import { ref } from 'vue'

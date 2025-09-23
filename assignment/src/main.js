@@ -7,7 +7,7 @@ import router from './router'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import './assets/custom.css'
+import './assets/css/custom.css'
 
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';

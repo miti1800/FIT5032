@@ -109,7 +109,7 @@ import { ref } from 'vue';
 import contact from '@/assets/images/contact_us.png';
 import { useToast } from 'primevue/usetoast';
 import CommonHeader from '@/components/CommonHeader.vue';
-import CommonFooter from '@/components/CommonFooter.vue';
+import CommonFooter from '@/components/Footer.vue';
 
 const toast = useToast();
 

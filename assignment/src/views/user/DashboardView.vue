@@ -55,7 +55,7 @@
             />
         </div>
     </div>
-    <AuthenticatedFooter />
+    <Footer />
 </template>
 
 <script setup>
@@ -63,5 +63,5 @@ import StatsCard from '@/components/StatsCard.vue';
 import RecipeCard from '@/components/RecipeCard.vue';
 import recipes from '@/assets/json/recipes.json';
 import AuthenticatedHeader from '@/components/AuthenticatedHeader.vue';
-import AuthenticatedFooter from '@/components/AuthenticatedFooter.vue';
+import Footer from '@/components/Footer.vue';
 </script>

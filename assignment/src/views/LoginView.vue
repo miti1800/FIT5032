@@ -86,7 +86,7 @@ import router from '@/router';
 import users from '../assets/json/users.json';
 import { ref } from 'vue';
 import CommonHeader from '@/components/CommonHeader.vue';
-import CommonFooter from '@/components/CommonFooter.vue';
+import CommonFooter from '@/components/Footer.vue';
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();

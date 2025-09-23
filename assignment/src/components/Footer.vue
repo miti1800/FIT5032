@@ -5,7 +5,6 @@
         <div class="col-lg-5 col-md-6">
           <div class="d-flex align-items-center mb-3">
             <h5 class="mb-0 fw-semibold">
-              <i class="bi bi-leaf-fill fs-4"></i>
               NutriED
             </h5>
           </div>
@@ -80,10 +79,26 @@
     </div>
 
     <hr class="m-0"/> 
-    <AuthenticatedFooter />
+
+    <div class="footer-section primary-bg mt-auto py-3 px-4">
+      <div class="d-flex align-items-center justify-content-between">
+          <p class="mb-0 small">
+              © 2025 NutriED. All rights reserved. 
+              <span class="d-none d-md-inline">| 501(c)(3) Non-Profit Organization</span>
+          </p>
+          <div class="text-md-end mt-2 mt-md-0">
+              <a href="#" class="footer-link small me-3">Privacy Policy</a>
+              <a href="#" class="footer-link small">Terms of Service</a>
+          </div>
+      </div>
+    </div>
   </footer>
 </template>
 
-<script setup>
-import AuthenticatedFooter from './AuthenticatedFooter.vue';
-</script>
+<style scoped>
+@media(max-width: 850px) {
+    .footer-section {
+        flex-direction: column;
+    }
+}
+</style>

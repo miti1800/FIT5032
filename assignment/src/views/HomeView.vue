@@ -94,7 +94,7 @@
 </template>
 
 <script setup>
-import CommonFooter from '@/components/CommonFooter.vue';
+import CommonFooter from '@/components/Footer.vue';
 import CommonHeader from '@/components/CommonHeader.vue';
 import cover_image from '@/assets/images/cover_image.jpg';
 </script>

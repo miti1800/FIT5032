@@ -186,7 +186,7 @@
         <p>Loading recipe details...</p>
     </div>
 
-    <AuthenticatedFooter />
+    <Footer />
 </template>
 
 <script setup>
@@ -195,7 +195,7 @@ import recipes from '@/assets/json/recipes.json';
 import { useRoute } from 'vue-router';
 import Rating from '@/components/Rating.vue';
 import AuthenticatedHeader from '@/components/AuthenticatedHeader.vue';
-import AuthenticatedFooter from '@/components/AuthenticatedFooter.vue';
+import Footer from '@/components/Footer.vue';
 import { useUserStore } from '@/stores/user';
 const userStore = useUserStore();
 
