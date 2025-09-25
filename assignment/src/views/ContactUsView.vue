@@ -1,5 +1,4 @@
 <template>
-    <CommonHeader />
     <div class="primary-color">
         <div class="container-fluid p-5">
             <div class="row align-items-center">
@@ -101,15 +100,12 @@
             </div>
         </div>
     </div>
-    <CommonFooter />
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import contact from '@/assets/images/contact_us.png';
 import { useToast } from 'primevue/usetoast';
-import CommonHeader from '@/components/CommonHeader.vue';
-import CommonFooter from '@/components/Footer.vue';
 
 const toast = useToast();
 

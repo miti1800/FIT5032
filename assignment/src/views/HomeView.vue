@@ -1,5 +1,4 @@
 <template>
-    <CommonHeader />
     <div class="hero-cover position-relative overflow-hidden">
         <div class="container position-relative py-5">
             <div class="row align-items-center pt-5">
@@ -90,12 +89,9 @@
             </div>
         </div>
     </div>
-    <CommonFooter />
 </template>
 
 <script setup>
-import CommonFooter from '@/components/Footer.vue';
-import CommonHeader from '@/components/CommonHeader.vue';
 import cover_image from '@/assets/images/cover_image.jpg';
 </script>
 

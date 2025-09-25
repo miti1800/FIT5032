@@ -1,5 +1,4 @@
 <template>
-    <CommonHeader />
     <div class="d-flex align-items-center login-background min-vh-100 primary-color py-5">
         <div class="col-md-6"></div>
         <div class="col-md-6 d-flex justify-content-center">
@@ -165,18 +164,15 @@
             </div>
         </div>
     </div>
-    <CommonFooter />
 </template>
 
 <script setup>
-import CommonFooter from '@/components/Footer.vue';
-import CommonHeader from '@/components/CommonHeader.vue';
 import router from '@/router'
 import { ref } from 'vue'
 import Datepicker from 'vue3-datepicker';
 import users from '@/assets/json/users.json';
 import { useUserStore } from '@/stores/user';
-import DOMPurify from 'dompurify'
+import DOMPurify from 'dompurify';
 
 const userStore = useUserStore();
 

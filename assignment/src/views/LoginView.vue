@@ -1,5 +1,4 @@
 <template>
-    <CommonHeader />
     <div class="d-flex align-items-center login-background min-vh-100 primary-color">
         <div class="col-md-6"></div>
         <div class="col-md-6 d-flex justify-content-center">
@@ -78,15 +77,12 @@
             </div>
         </div>
     </div>
-    <CommonFooter />
 </template>
 
 <script setup>
 import router from '@/router';
 import users from '../assets/json/users.json';
 import { ref } from 'vue';
-import CommonHeader from '@/components/CommonHeader.vue';
-import CommonFooter from '@/components/Footer.vue';
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();

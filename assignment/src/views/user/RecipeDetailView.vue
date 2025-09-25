@@ -1,6 +1,4 @@
 <template>
-    <AuthenticatedHeader />
-    
     <div v-if="recipe">
         <div class="px-4 py-3 m-2 primary-color">
             <div class="d-flex align-items-center fw-lighter">
@@ -185,8 +183,6 @@
     <div v-else class="text-center py-5">
         <p>Loading recipe details...</p>
     </div>
-
-    <Footer />
 </template>
 
 <script setup>
@@ -194,8 +190,6 @@ import { ref, onMounted } from 'vue';
 import recipes from '@/assets/json/recipes.json';
 import { useRoute } from 'vue-router';
 import Rating from '@/components/Rating.vue';
-import AuthenticatedHeader from '@/components/AuthenticatedHeader.vue';
-import Footer from '@/components/Footer.vue';
 import { useUserStore } from '@/stores/user';
 const userStore = useUserStore();
 
