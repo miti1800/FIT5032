@@ -57,6 +57,11 @@
                         </div>
                     </div>
 
+                    <div v-if="errors.firebase" class="error-box py-1 px-2 mt-1 mb-2 small d-flex align-items-center">
+                        <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
+                        {{ errors.firebase }}
+                    </div>
+
                     <button type="submit" class="btn primary-btn w-100 mb-3">
                         Sign In
                     </button>
@@ -84,6 +89,15 @@ import router from '@/router';
 import users from '../assets/json/users.json';
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { useToast } from 'primevue/usetoast';
+import { getFirebaseErrorMessage } from '@/helpers/firebase/firebaseHelpers';
+
+const toast = useToast();
+
+const auth = getAuth();
+const db = getFirestore();
 
 const userStore = useUserStore();
 
@@ -94,7 +108,8 @@ const formData = ref({
 
 const errors = ref({
     email: null,
-    password: null
+    password: null,
+    firebase: null
 });
 
 const showPassword = ref(false);
@@ -105,13 +120,10 @@ const togglePassword = () => {
 
 const validateEmail = (blur) => {
     const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.value.email);
-    const exists = users.some(user => user.email === formData.value.email);
     if (formData.value.email.length < 1) {
         if(blur) errors.value.email = "Email cannot be empty.";
     } else if (!isValidEmail) {
         if(blur) errors.value.email = "Email is not valid.";
-    } else if (!exists) {
-        if(blur) errors.value.email = "Email does not exist, please sign up.";
     } else {
         errors.value.email = null;
     }
@@ -125,8 +137,6 @@ const validatePassword = (blur) => {
     const hasNumber = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-    const existingUser = users.find(user => user.email === formData.value.email);
-
     if (password.length < minLength) {
         if (blur) errors.value.password = `Password must be at least ${minLength} characters long.`;
     } else if (!hasUppercase) {
@@ -137,27 +147,55 @@ const validatePassword = (blur) => {
         if (blur) errors.value.password = "Password must contain at least one number.";
     } else if (!hasSpecialChar) {
         if (blur) errors.value.password = "Password must contain at least one special character.";
-    } else if (existingUser && existingUser.password !== formData.value.password) {
-        if (blur) errors.value.password = "Incorrect password.";
     } else {
         errors.value.password = null;
     }
 };
 
-const handleLogin = () => {
+const handleLogin = async () => {
     validateEmail(true);
     validatePassword(true);
 
     if(!errors.value.email && !errors.value.password) {
-        const existingUser = users.find(user => user.email === formData.value.email);
-        userStore.setUser(existingUser);
-        if(existingUser.role === "admin") {
-            router.push({ name: 'Admin Dashboard'});
+        try {
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                formData.value.email,
+                formData.value.password
+            );
+
+            const user = userCredential.user;
+
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+
+            if (userDoc.exists()) {
+                const userData = { id: user.uid, ...userDoc.data() };
+
+                userStore.setUser(userData);
+
+                toast.add({
+                    severity: "success",
+                    summary: "Login Successful",
+                    detail: `Welcome back, ${userData.firstName}!`,
+                    life: 3000,
+                });
+
+                errors.value.firebase = null;
+                if(userData.role === "admin") {
+                    router.push({ name: 'Admin Dashboard'});
+                }
+                else {
+                    router.push({ name: 'Dashboard' });
+                }
+                
+                clearForm();
+            } else {
+                errors.value.firebase = "User profile does not exists.";
+            }
+        } catch (error) {
+            console.error(error);
+            errors.value.firebase = getFirebaseErrorMessage(error.code);
         }
-        else {
-            router.push({ name: 'Dashboard' });
-        }
-        clearForm();
     }
 };
 

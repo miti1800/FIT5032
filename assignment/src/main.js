@@ -12,6 +12,16 @@ import './assets/css/custom.css'
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import ToastService from 'primevue/toastservice';
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDDkuzouU_bc46-QrEGpRj7nSar6GTAcvI",
+  authDomain: "nutried-77949.firebaseapp.com",
+  projectId: "nutried-77949",
+  storageBucket: "nutried-77949.firebasestorage.app",
+  messagingSenderId: "839081070965",
+  appId: "1:839081070965:web:63bf71918e25b8ba8f833c"
+};
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -35,5 +45,7 @@ app.use(PrimeVue, {
 app.use(router);
 
 app.use(ToastService);
+
+initializeApp(firebaseConfig);
 
 app.mount('#app');

@@ -57,7 +57,7 @@
 
         <div v-if="dropdownOpen" class="dropdown-menu-custom shadow-lg">
             <div class="px-3 py-2 border-bottom">
-                <strong>{{ userStore.currentUser.first_name }} {{ userStore.currentUser.last_name }}</strong>
+                <strong>{{ userStore.currentUser.firstName }} {{ userStore.currentUser.lastName }}</strong>
             </div>
             <small class="dropdown-item">
                 <i class="bi bi-gear-fill me-2"></i>

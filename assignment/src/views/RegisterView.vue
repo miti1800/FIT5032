@@ -145,9 +145,16 @@
                                 <i :class="showConfirmPassword ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill'"></i>
                             </button>
                         </div>
-                        <div v-if="errors.confirmPassword" class="text-danger">
+                        <div v-if="errors.confirmPassword" class="error-box py-1 px-2 mt-1 mb-2 small d-flex align-items-center">
+                            <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
                             {{ errors.confirmPassword }}
                         </div>
+                    </div>
+
+
+                    <div v-if="errors.firebase" class="error-box py-1 px-2 mt-1 mb-2 small d-flex align-items-center">
+                        <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
+                        {{ errors.firebase }}
                     </div>
 
                     <button type="submit" class="btn primary-btn w-100 mb-3">
@@ -170,9 +177,17 @@
 import router from '@/router'
 import { ref } from 'vue'
 import Datepicker from 'vue3-datepicker';
-import users from '@/assets/json/users.json';
 import { useUserStore } from '@/stores/user';
 import DOMPurify from 'dompurify';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
+import { useToast } from 'primevue/usetoast';
+import { getFirebaseErrorMessage } from '@/helpers/firebase/firebaseHelpers';
+
+const toast = useToast();
+
+const auth = getAuth();
+const db = getFirestore();
 
 const userStore = useUserStore();
 
@@ -205,16 +220,17 @@ const errors = ref({
     email: null,
     dob: null,
     password: null,
-    confirmPassword: null
+    confirmPassword: null,
+    firebase: null
 });
 
 const validateFirstName = (blur) => {
     const name = formData.value.firstName.trim();
     const isValidName = /^[A-Za-z\s]+$/.test(name)
     if (name.length < 1) {
-        if (blur) errors.value.firstName = 'Name cannot be empty.'
+        if (blur) errors.value.firstName = 'First name cannot be empty.'
     } else if(!isValidName) {
-        if (blur) errors.value.firstName = 'Name should only contain letters and spaces.'
+        if (blur) errors.value.firstName = 'First name should only contain letters and spaces.'
     } else {
         errors.value.firstName = null
     }
@@ -224,9 +240,9 @@ const validateLastName = (blur) => {
     const name = formData.value.lastName.trim();
     const isValidName = /^[A-Za-z\s]+$/.test(name)
     if (name.length < 1) {
-        if (blur) errors.value.lastName = 'Name cannot be empty.'
+        if (blur) errors.value.lastName = 'Last name cannot be empty.'
     } else if(!isValidName) {
-        if (blur) errors.value.lastName = 'Name should only contain letters and spaces.'
+        if (blur) errors.value.lastName = 'Last name should only contain letters and spaces.'
     } else {
         errors.value.lastName = null
     }
@@ -234,13 +250,10 @@ const validateLastName = (blur) => {
 
 const validateEmail = (blur) => {
     const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.value.email);
-    const exists = users.some(user => user.email === formData.value.email);
     if (formData.value.email.length < 1) {
         if(blur) errors.value.email = "Email cannot be empty.";
     } else if (!isValidEmail) {
         if(blur) errors.value.email = "Email is not valid.";
-    } else if (exists) {
-        if(blur) errors.value.email = "Email already registered.";
     } else {
         errors.value.email = null;
     }
@@ -286,7 +299,7 @@ const validateConfirmPassword = (blur) => {
     }
 };
 
-const handleRegistration = () => {
+const handleRegistration = async () => {
     validateFirstName(true);
     validateLastName(true);
     validateEmail(true);
@@ -294,26 +307,36 @@ const handleRegistration = () => {
     validatePassword(true);
     validateConfirmPassword(true);
     if(!errors.value.email && !errors.value.password && !errors.value.firstName && !errors.value.lastName && !errors.value.confirmPassword && !errors.value.dob) {
-        const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const year = today.getFullYear();
+        errors.value.firebase = null
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, formData.value.email, formData.value.password);
+            const user = userCredential.user;
 
+            await setDoc(doc(db, "users", user.uid), {
+                firstName: DOMPurify.sanitize(formData.value.firstName),
+                lastName: DOMPurify.sanitize(formData.value.lastName),
+                dob: DOMPurify.sanitize(formData.value.dob),
+                email: DOMPurify.sanitize(formData.value.email),
+                createdAt: new Date(),
+                role: "user"
+            });
 
-        const newUserObj = {
-            user_id: users.length + 1,
-            first_name: DOMPurify.sanitize(formData.value.firstName),
-            last_name: DOMPurify.sanitize(formData.value.lastName),
-            email: DOMPurify.sanitize(formData.value.email),
-            date_of_birth: DOMPurify.sanitize(formData.value.dob),
-            password: DOMPurify.sanitize(formData.value.password),
-            date_joined: `${day}-${month}-${year}`,
-            role: "user"
-        };
-        users.push(newUserObj);
-        userStore.setUser(newUserObj);
-        router.push({ name: 'Dashboard' });
-        clearForm();
+            toast.add({ severity: 'success', summary: 'Success', detail: 'Account created successfully!', life: 3000 });
+
+            userStore.setUser({
+                userId: user.uid,
+                firstName: DOMPurify.sanitize(formData.value.firstName),
+                lastName: DOMPurify.sanitize(formData.value.lastName),
+                email: DOMPurify.sanitize(formData.value.email),
+                dob: DOMPurify.sanitize(formData.value.dob),
+                role: "user"
+            });
+
+            router.push({ name: 'Dashboard' });
+            clearForm();
+        } catch (error) {
+            errors.value.firebase = getFirebaseErrorMessage(error.code);
+        }
     }
 };
 
