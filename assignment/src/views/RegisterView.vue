@@ -1,4 +1,8 @@
 <template>
+    <div v-if="loading" class="text-center p-5 loader-overlay">
+        <span class="spinner-border me-2" role="status"></span>
+        <p class="mt-2">Loading...</p>
+    </div>
     <div class="d-flex align-items-center login-background min-vh-100 primary-color py-5">
         <div class="col-md-6"></div>
         <div class="col-md-6 d-flex justify-content-center">
@@ -188,6 +192,7 @@ const toast = useToast();
 
 const auth = getAuth();
 const db = getFirestore();
+const loading = ref(false);
 
 const userStore = useUserStore();
 
@@ -307,6 +312,7 @@ const handleRegistration = async () => {
     validatePassword(true);
     validateConfirmPassword(true);
     if(!errors.value.email && !errors.value.password && !errors.value.firstName && !errors.value.lastName && !errors.value.confirmPassword && !errors.value.dob) {
+        loading.value = true;
         errors.value.firebase = null
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, formData.value.email, formData.value.password);
@@ -331,11 +337,12 @@ const handleRegistration = async () => {
                 dob: DOMPurify.sanitize(formData.value.dob),
                 role: "user"
             });
-
             router.push({ name: 'Dashboard' });
             clearForm();
         } catch (error) {
             errors.value.firebase = getFirebaseErrorMessage(error.code);
+        } finally {
+            loading.value = false;
         }
     }
 };

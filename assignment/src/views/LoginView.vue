@@ -1,4 +1,8 @@
 <template>
+    <div v-if="loading" class="text-center p-5 loader-overlay">
+        <span class="spinner-border me-2" role="status"></span>
+        <p class="mt-2">Loading...</p>
+    </div>
     <div class="d-flex align-items-center login-background min-vh-100 primary-color">
         <div class="col-md-6"></div>
         <div class="col-md-6 d-flex justify-content-center">
@@ -67,7 +71,7 @@
                     </button>
 
                     <div class="d-flex justify-content-center mb-2 primary-color">
-                        <router-link to="/login" class="nav-link mx-0">
+                        <router-link to="/forgot-password" class="nav-link mx-0">
                             Forgot Password?
                         </router-link>
                     </div>
@@ -86,7 +90,6 @@
 
 <script setup>
 import router from '@/router';
-import users from '../assets/json/users.json';
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -94,6 +97,7 @@ import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useToast } from 'primevue/usetoast';
 import { getFirebaseErrorMessage } from '@/helpers/firebase/firebaseHelpers';
 
+const loading = ref(false);
 const toast = useToast();
 
 const auth = getAuth();
@@ -157,6 +161,7 @@ const handleLogin = async () => {
     validatePassword(true);
 
     if(!errors.value.email && !errors.value.password) {
+        loading.value = true;
         try {
             const userCredential = await signInWithEmailAndPassword(
                 auth,
@@ -195,6 +200,8 @@ const handleLogin = async () => {
         } catch (error) {
             console.error(error);
             errors.value.firebase = getFirebaseErrorMessage(error.code);
+        } finally {
+            loading.value = false;
         }
     }
 };

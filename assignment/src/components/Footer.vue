@@ -22,7 +22,7 @@
             </div>
             <div class="d-flex align-items-center mb-2">
               <i class="bi bi-envelope-fill me-2 flex-shrink-0"></i>
-              <small>info@nutried.org</small>
+              <small>nutried000@gmail.com</small>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@
         <div class="col-lg-2 col-md-12">
           <h5 class="py-1 mb-3 fw-semibold">Get Involved</h5>
           <div class="mb-3">
-            <button class="btn primary-btn fw-medium mx-0 px-5">
+            <button class="btn primary-btn-dark-bg w-100 fw-medium mx-0 px-5">
               Sign-Up
             </button>
           </div>

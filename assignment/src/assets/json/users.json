@@ -4,10 +4,10 @@
     "first_name": "John",
     "last_name": "Doe",
     "date_of_birth": "12-04-1995",
-    "email": "john.doe@example.com",
-    "password": "JohnD#123",
+    "email": "johnDoe@example.com",
+    "password": "John@123",
     "date_joined": "15-01-2023",
-    "role": "user"
+    "role": "nutritionist"
   },
   {
     "user_id": 2,
@@ -54,8 +54,8 @@
     "first_name": "Admin",
     "last_name": "",
     "date_of_birth": "10-09-1995",
-    "email": "nutriEd.admin@gmail.com",
-    "password": "Admin@123",
+    "email": "nutried000@gmail.com",
+    "password": "Nutried@1234",
     "date_joined": "20-12-2012",
     "role": "admin"
   }

@@ -9,6 +9,7 @@ import RecipeDetailView from '@/views/user/RecipeDetailView.vue'
 import { useUserStore } from '@/stores/user'
 import UserManagement from '@/views/admin/UserManagement.vue'
 import PageNotFoundView from '@/views/PageNotFoundView.vue'
+import ForgotPassword from '@/views/ForgotPassword.vue'
 
 const routes = [
   {
@@ -55,6 +56,11 @@ const routes = [
     component: RecipeDetailView,
     props: true,
     meta: { requiresAuth: true, roles: ["user", "admin"] }
+  },
+  {
+    path: '/forgot-password',
+    name: 'Forgot Password',
+    component: ForgotPassword
   },
   {
     path: '/:pathMatch(.*)*',

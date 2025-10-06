@@ -4,10 +4,11 @@
         <button
             v-if="userStore.currentUser"
             class="icon-btn hamburger primary-color"
+            @click="toggleSidebar"
         >
             <i class="bi bi-list fs-3 primary-color"></i>
         </button>
-        <h3 class="px-2 mb-0 fw-bold primary-color">
+        <h3 v-if="!userStore.currentUser" class="px-2 mb-0 fw-bold primary-color">
             <img :src="logo" alt="App logo" class="app-logo"/> 
             NutriED
         </h3>
@@ -49,10 +50,11 @@
             </button>
         </div>
         <button
-            class="avatar-btn primary-color"
+            class="icon-btn primary-color"
             @click="toggleDropdown"
         >
-            <img :src="profile" alt="profile" class="avatar"/>
+            <strong>{{userStore.currentUser.firstName[0] }}{{ userStore.currentUser.lastName[0] }}</strong>
+            <!-- <img :src="profile" alt="profile" class="avatar"/> -->
         </button>
 
         <div v-if="dropdownOpen" class="dropdown-menu-custom shadow-lg">
@@ -72,16 +74,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 import profile from '@/assets/images/profile.jpg';
 import users from '@/assets/json/users.json';
 import router from '@/router';
 import { useUserStore } from '@/stores/user';
 import logo from '@/assets/images/logo.png';
 
+const emit = defineEmits(["toggle-sidebar"]);
+
 const userStore = useUserStore();
 
 const dropdownOpen = ref(false);
+
+const toggleSidebar = () => {
+  emit("toggle-sidebar");
+};
 
 const toggleDropdown = () => {
     dropdownOpen.value = !dropdownOpen.value
@@ -109,6 +117,10 @@ const toggleMenu = () => {
 
 .hamburger, .avatar-btn {
   background: transparent;
+}
+
+.hamburger {
+    display: none;
 }
 
 .avatar {
@@ -149,6 +161,10 @@ const toggleMenu = () => {
 }
 
 @media (max-width: 992px) {
+    .hamburger {
+        display: block;
+    }
+
     .menu-options {
         flex-direction: column;
         align-items: start !important;
