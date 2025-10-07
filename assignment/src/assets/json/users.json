@@ -4,7 +4,7 @@
     "first_name": "John",
     "last_name": "Doe",
     "date_of_birth": "12-04-1995",
-    "email": "johnDoe@example.com",
+    "email": "johnDoe@gmail.com",
     "password": "John@123",
     "date_joined": "15-01-2023",
     "role": "nutritionist"
@@ -14,37 +14,37 @@
     "first_name": "Jane",
     "last_name": "Smith",
     "date_of_birth": "30-08-1992",
-    "email": "jane.smith@example.com",
-    "password": "Mypassword@123",
+    "email": "jane.smith@gmail.com",
+    "password": "JaneSmith@123",
     "date_joined": "22-03-2023",
-    "role": "user"
+    "role": "nutritionist"
   },
   {
     "user_id": 3,
     "first_name": "Michael",
     "last_name": "Brown",
     "date_of_birth": "11-05-1988",
-    "email": "michael.brown@example.com",
-    "password": "Testpass@456",
+    "email": "michael.brown@gmail.com",
+    "password": "Micheal@456",
     "date_joined": "06-05-2023",
-    "role": "user"
+    "role": "nutritionist"
   },
   {
     "user_id": 4,
     "first_name": "Emily",
     "last_name": "White",
     "date_of_birth": "17-02-1999",
-    "email": "emily.white@example.com",
+    "email": "emily.white@gmail.com",
     "password": "Emily@1234",
     "date_joined": "10-09-2023",
-    "role": "user"
+    "role": "nutritionist"
   },
   {
     "user_id": 5,
     "first_name": "David",
     "last_name": "Jones",
     "date_of_birth": "22-12-1990",
-    "email": "david.jones@example.com",
+    "email": "david.jones@gmail.com",
     "password": "Secure@123",
     "date_joined": "28-11-2023",
     "role": "user"

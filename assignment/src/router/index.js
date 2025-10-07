@@ -5,7 +5,7 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DashboardView from '@/views/user/DashboardView.vue'
 import AdminDashboard from '@/views/admin/AdminDashboard.vue'
-import RecipeDetailView from '@/views/user/RecipeDetailView.vue'
+import RecipeDetailView from '@/views/RecipeDetailView.vue'
 import { useUserStore } from '@/stores/user'
 import UserManagement from '@/views/admin/UserManagement.vue'
 import PageNotFoundView from '@/views/PageNotFoundView.vue'
@@ -74,20 +74,20 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
-  const userStore = useUserStore();
+// router.beforeEach((to, from, next) => {
+//   const userStore = useUserStore();
 
-  if (to.meta.requiresAuth) {
-    if (!userStore.currentUser) {
-      return next({ name: 'Login' })
-    }
+//   if (to.meta.requiresAuth) {
+//     if (!userStore.currentUser) {
+//       return next({ name: 'Login' })
+//     }
 
-    if (to.meta.roles && !to.meta.roles.includes(userStore.currentUser.role)) {
-      return next({ name: userStore.currentUser.role === "admin" ? 'AdminDashboard' : 'Dashboard' })
-    }
-  }
+//     if (to.meta.roles && !to.meta.roles.includes(userStore.currentUser.role)) {
+//       return next({ name: userStore.currentUser.role === "admin" ? 'AdminDashboard' : 'Dashboard' })
+//     }
+//   }
   
-  next();
-});
+//   next();
+// });
 
 export default router;

@@ -321,7 +321,7 @@ const handleRegistration = async () => {
             await setDoc(doc(db, "users", user.uid), {
                 firstName: DOMPurify.sanitize(formData.value.firstName),
                 lastName: DOMPurify.sanitize(formData.value.lastName),
-                dob: DOMPurify.sanitize(formData.value.dob),
+                dob: formData.value.dob,
                 email: DOMPurify.sanitize(formData.value.email),
                 createdAt: new Date(),
                 role: "user"
@@ -334,11 +334,11 @@ const handleRegistration = async () => {
                 firstName: DOMPurify.sanitize(formData.value.firstName),
                 lastName: DOMPurify.sanitize(formData.value.lastName),
                 email: DOMPurify.sanitize(formData.value.email),
-                dob: DOMPurify.sanitize(formData.value.dob),
+                dob: formData.value.dob,
                 role: "user"
             });
             router.push({ name: 'Dashboard' });
-            clearForm();
+            clearForm();        
         } catch (error) {
             errors.value.firebase = getFirebaseErrorMessage(error.code);
         } finally {
