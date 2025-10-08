@@ -68,17 +68,17 @@ body {
 }
 
 .primary-btn {
-  color: var(--secondary);
-  background-color: var(--primary);
-  border: 2px solid var(--primary);
-  border-radius: 8px;
+  color: var(--secondary) !important;
+  background-color: var(--primary) !important;
+  border: 2px solid var(--primary) !important;
+  border-radius: 8px !important;
   font-weight: bold;
   cursor: pointer;
 }
 
 .primary-btn:hover {
-  color: var(--primary);
-  background-color: transparent;
+  color: var(--primary) !important;
+  background-color: transparent !important;
   border: 2px solid var(--primary);
 }
 
@@ -107,6 +107,55 @@ body {
 
 .custom-table .p-datatable-tbody > tr > td {
   color: var(--primary);
+}
+
+.custom-table .p-datatable-sort-icon, .custom-table .p-button-text.p-button-secondary {
+  color: var(--secondary) !important;
+}
+
+.custom-table .p-datatable-sortable-column:not(.p-highlight):hover {
+  background-color: var(--primary) !important;
+  color: var(--secondary);
+}
+
+.custom-table .p-select-label {
+  color: var(--primary) !important;
+}
+
+.custom-table .p-paginator-page.p-paginator-page-selected, .p-select-option.p-select-option-selected, .custom-table .p-button-text.p-button-secondary:not(:disabled):hover {
+    background: var(--primary) !important;
+    color: var(--secondary) !important;
+}
+
+.custom-table .p-select:not(.p-disabled).p-focus, .p-select:not(.p-disabled).p-focus, .p-inputtext:enabled:focus {
+  border-color: var(--primary)!important ;
+}
+
+.p-button {
+  background-color: var(--primary) !important;
+  color: var(--secondary) !important;
+  border-color: var(--primary) !important;
+}
+
+.p-button:not(:disabled):hover {
+  background-color: var(--secondary) !important;
+  color: var(--primary) !important;
+}
+
+.p-button-outlined {
+  background-color: var(--secondary) !important;
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+}
+
+.p-button-outlined:not(:disabled):hover {
+  background-color: var(--primary) !important;
+  color: var(--secondary) !important;
+}
+
+.p-datepicker-day-selected {
+  background-color: var(--primary) !important;
+  color: var(--secondary) !important;
 }
 
 .icon-btn,
@@ -157,9 +206,9 @@ body {
 }
 
 .form-control:focus, .input-group-text.focused {
-  border-color: var(--primary);
-  color: var(--primary);
-  box-shadow: 0 0 0 0.2rem rgba(40, 75, 99, 0.25);
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(40, 75, 99, 0.25) !important;
   outline: none;
 }
 
