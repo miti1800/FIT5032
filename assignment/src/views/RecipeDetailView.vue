@@ -108,9 +108,9 @@
 
                     <h5 class="fw-bold">Made by:</h5>
                     <div class="d-flex align-items-center">
-                        <img :src="recipe.author.photo" :alt="recipe.author.name" class="avatar-btn profile-photo me-2">
+                        <!-- <img :src="recipe.author.photo" :alt="recipe.author.name" class="avatar-btn profile-photo me-2"> -->
                         <div>
-                            <h6 class="mb-0">{{ recipe.author.name }}</h6>
+                            <h6 class="mb-0">{{ recipe.author_name }}</h6>
                         </div>
                     </div>
                 </div>
@@ -191,7 +191,10 @@ import recipes from '@/assets/json/recipes.json';
 import { useRoute } from 'vue-router';
 import Rating from '@/components/Rating.vue';
 import { useUserStore } from '@/stores/user';
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+
 const userStore = useUserStore();
+const db = getFirestore();
 
 const props = defineProps({
     id: {
@@ -207,9 +210,12 @@ const route = useRoute();
 
 const hasUserRated = ref(false);
 
-onMounted(() => {
+onMounted(async () => {
+    console.log(route.params.id);
     const recipeId = props.id || route.params.id;
-    recipe.value = recipes.find(r => r.id === recipeId)
+    
+    const recipeDoc = await getDoc(doc(db, "recipes", recipeId));
+    recipe.value = { recipeId, ...recipeDoc.data() };
     hasUserRated.value = recipe.value.user_id.includes(userStore.currentUser.user_id);
 });
 

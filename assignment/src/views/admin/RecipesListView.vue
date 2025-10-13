@@ -5,16 +5,16 @@
     </div>
     <div class="px-4 py-3 m-2 primary-color">
         <div class="d-flex align-items-center fw-lighter">Admin > &nbsp;
-            <p class="fw-normal text-decoration-underline mb-0">Users</p>
+            <p class="fw-normal text-decoration-underline mb-0">Recipes</p>
         </div>
     </div>
-    <div v-if="users.length > 0" class="card p-4 mx-4 mb-4 primary-color">
-        <h5 class="fw-bold">User Management</h5>
+    <div v-if="recipes.length > 0" class="card p-4 mx-4 mb-4 primary-color">
+        <h5 class="fw-bold">Recipes List</h5>
 
         <DataTable 
-            :value="users"
+            :value="recipes"
             v-model:filters="filters"
-            dataKey="userId"
+            dataKey="recipeId"
             responsiveLayout="scroll"
             stripedRows
             class="custom-table"
@@ -26,7 +26,6 @@
             filterDisplay="menu"
             :globalFilterFields="['firstName', 'lastName', 'role', 'email', 'dob', 'createdAt']"
             :loading="loading"
-            showGridlines
         >
             <template #header class="p-0">
                 <div class="d-flex justify-content-between align-items-center">
@@ -38,22 +37,22 @@
                 </div>
             </template>
 
-            <template #empty> No users found. </template>
-            <template #loading> Loading users data... </template>
+            <template #empty> No recipes found. </template>
+            <template #loading> Loading recipe data... </template>
 
-            <Column field="firstName" header="First Name" filterField="firstName" sortable>
-                <template #filter="{ filterModel }">
-                    <InputText v-model="filterModel.value" placeholder="Search by First Name" />
+            <Column header="Recipe Name" filterField="recipe_name" sortable>
+                <template #body="{ data }">
+                    <div class="d-flex align-items-center gap-2">
+                        <img :alt="data.recipe_name" :src="data.image" style="width: 50px;height:50px" />
+                        <span>{{ data.recipe_name }}</span>
+                    </div>
                 </template>
-            </Column>
-
-            <Column field="lastName" header="Last Name" filterField="lastName" sortable>
                 <template #filter="{ filterModel }">
                 <InputText v-model="filterModel.value" placeholder="Search by Last Name" />
                 </template>
             </Column>
 
-            <Column field="role" header="Role" filterField="role" sortable 
+            <Column field="cuisine_path" header="Category" filterField="cuisine_path" sortable 
                 :showFilterMatchModes="false"
                 filterMatchMode="equals"
             >
@@ -62,37 +61,45 @@
                 </template>
             </Column>
 
-            <Column field="email" header="Email" filterField="email" sortable>
+            <Column header="Ratings" filterField="rating" sortable>
+                <template #body="slotProps">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-star-fill warning-color"></i>
+                        <span>
+                        {{ averageRating(slotProps.data.rating) }}
+                        </span>
+                    </div>
+                </template>
                 <template #filter="{ filterModel }">
                 <InputText v-model="filterModel.value" placeholder="Search by Email" />
                 </template>
             </Column>
 
-            <Column field="dob" header="Date of Birth" style="min-width: 10rem" filterField="dob" sortable
+            <Column field="author_name" header="Author Name" filterField="author_name" sortable>
+                <template #filter="{ filterModel }">
+                <InputText v-model="filterModel.value" placeholder="Search by Email" />
+                </template>
+            </Column>
+
+            <Column header="Posted on" style="min-width: 10rem" filterField="posted_by" sortable
                 :showFilterMatchModes="false"
             >
                 <template #body="{ data }">
-                    {{ formatDate(data.dob) }}
+                    {{ formatDate(data.posted_by) }}
                 </template>
                 <template #filter="{ filterModel }">
                     <DatePicker v-model="filterModel.value" placeholder="Select date" dateFormat="dd/mm/yy" />
                 </template>
             </Column>
 
-            <Column field="createdAt" header="Date Joined" style="min-width: 10rem" filterField="createdAt" sortable
-                :showFilterMatchModes="false"
-            >
-                <template #body="{ data }">
-                    {{ formatDate(data.createdAt) }}
-                </template>
-                <template #filter="{ filterModel }">
-                <DatePicker v-model="filterModel.value" placeholder="Select date" dateFormat="dd/mm/yy" />
-                </template>
-            </Column>
-
             <Column header="Actions">
                 <template #body="slotProps">
-                    <button class="icon-btn mx-3" @click="onDelete(slotProps.data)">
+                    <router-link :to="{ name: 'RecipeDetailView', params: { id: slotProps.data.recipeId } }"
+                        class="icon-btn me-3"
+                    >
+                        <i class="bi bi-file-earmark-text-fill fs-5 primary-color"></i>
+                    </router-link>
+                    <button class="icon-btn" @click="onDelete(slotProps.data)">
                         <i class="bi bi-trash-fill fs-5 primary-color"></i>
                     </button>
                 </template>
@@ -126,7 +133,7 @@ const filters = ref({
     createdAt: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: 'dateIs' }] },
 });
 
-const users = ref([]);
+const recipes = ref([]);
 const loading = ref(true);
 
 const first = ref(0);
@@ -147,21 +154,19 @@ const clearFilter = () => {
 
 onMounted(async () => {
     try {
-        const querySnapshot = await getDocs(collection(db, 'users'));
-        users.value = querySnapshot.docs.map(doc => {
+        const querySnapshot = await getDocs(collection(db, 'recipes'));
+        recipes.value = querySnapshot.docs.map(doc => {
             const data = doc.data();
             return {
-            userId: doc.id,
+            recipeId: doc.id,
             ...data,
-            dob: data.dob?.seconds ? new Date(data.dob.seconds * 1000) : null,
-            createdAt: data.createdAt?.seconds ? new Date(data.createdAt.seconds * 1000) : null,
+            posted_by: data.posted_on?.seconds ? new Date(data.posted_on.seconds * 1000) : null,
             };
-        }).filter(user => user.role?.toLowerCase() !== 'admin');
+        })
     } catch (error) {
         console.error(error);
     } finally {
         loading.value = false;
-        console.log(users.value[0].dob instanceof Date)
     }
 });
 
@@ -175,6 +180,12 @@ const formatDate = (date) => {
 
 const onDelete = (user) => {
   console.log('Deleting', user)
+};
+
+const averageRating = (ratings) => {
+  if (!ratings || ratings.length === 0) return '0.0';
+  const sum = ratings.reduce((acc, r) => acc + r, 0);
+  return (sum / ratings.length).toFixed(1);
 };
 </script>
 

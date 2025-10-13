@@ -4,12 +4,13 @@ import ContactUsView from '@/views/ContactUsView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DashboardView from '@/views/user/DashboardView.vue'
-import AdminDashboard from '@/views/admin/AdminDashboard.vue'
+import AdminDashboardView from '@/views/admin/AdminDashboardView.vue'
 import RecipeDetailView from '@/views/RecipeDetailView.vue'
 import { useUserStore } from '@/stores/user'
-import UserManagement from '@/views/admin/UserManagement.vue'
+import UserManagementView from '@/views/admin/UserManagementView.vue'
 import PageNotFoundView from '@/views/PageNotFoundView.vue'
 import ForgotPassword from '@/views/ForgotPassword.vue'
+import RecipesListView from '@/views/admin/RecipesListView.vue'
 
 const routes = [
   {
@@ -41,13 +42,13 @@ const routes = [
   {
     path: '/admin/dashboard',
     name: 'Admin Dashboard',
-    component: AdminDashboard,
+    component: AdminDashboardView,
     meta: { requiresAuth: true, roles: ["admin"] }
   },
   {
     path: '/admin/user-management',
     name: 'User Management',
-    component: UserManagement,
+    component: UserManagementView,
     meta: { requiresAuth: true, roles: ["admin"] }
   },
   {
@@ -56,6 +57,12 @@ const routes = [
     component: RecipeDetailView,
     props: true,
     meta: { requiresAuth: true, roles: ["user", "admin"] }
+  },
+  {
+    path: '/admin/recipes-list',
+    name: 'Recipe List',
+    component: RecipesListView,
+    meta: { requiresAuth: true, roles: ["admin"] }
   },
   {
     path: '/forgot-password',

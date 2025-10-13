@@ -158,6 +158,10 @@ body {
   color: var(--secondary) !important;
 }
 
+.p-datatable-header {
+  padding: 1rem 0rem !important;
+}
+
 .icon-btn,
 .avatar-btn {
   display: inline-flex;
