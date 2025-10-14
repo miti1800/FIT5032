@@ -11,6 +11,7 @@ import UserManagementView from '@/views/admin/UserManagementView.vue'
 import PageNotFoundView from '@/views/PageNotFoundView.vue'
 import ForgotPassword from '@/views/ForgotPassword.vue'
 import RecipesListView from '@/views/admin/RecipesListView.vue'
+import { auth } from '@/firebaseconfig'
 
 const routes = [
   {
@@ -82,5 +83,42 @@ const router = createRouter({
 });
 
 
+router.beforeEach(async (to, from, next) => {
+  const userStore = useUserStore()
+
+  if (userStore.loadingUser) {
+    await new Promise(resolve => {
+      const unwatch = userStore.$subscribe(() => {
+        if (!userStore.loadingUser) {
+          unwatch()
+          resolve()
+        }
+      })
+    })
+  }
+
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const allowedRoles = to.meta.roles || []
+  const currentUser = userStore.currentUser
+  const firebaseUser = auth.currentUser
+
+  if (requiresAuth && !firebaseUser) {
+    return next({ name: 'Login', query: { redirect: to.fullPath } })
+  }
+
+  if (requiresAuth && allowedRoles.length > 0) {
+    if (!currentUser || !allowedRoles.includes(currentUser.role)) {
+      if (currentUser?.role === 'admin') {
+        return next({ name: 'Admin Dashboard' })
+      } else if (currentUser?.role === 'user') {
+        return next({ name: 'Dashboard' })
+      } else {
+        return next({ name: 'Login' })
+      }
+    }
+  }
+
+  return next()
+});
 
 export default router;

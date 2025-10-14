@@ -3,11 +3,15 @@ import Toast from 'primevue/toast';
 import Footer from './components/Footer.vue';
 import Header from './components/Header.vue';
 import Sidebar from './components/Sidebar.vue';
-import { useUserStore } from '@/stores/user';
-import { ref } from 'vue';
+import { useUserStore } from '@/stores/user'
+import { ref, onMounted } from 'vue';
 
 const userStore = useUserStore();
 const showSidebar = ref(false);
+
+onMounted(() => {
+  userStore.initAuthListener();
+});
 
 const toggleSidebar = () => {
   showSidebar.value = !showSidebar.value;

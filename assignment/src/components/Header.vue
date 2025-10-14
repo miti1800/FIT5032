@@ -94,9 +94,9 @@ const toggleDropdown = () => {
     dropdownOpen.value = !dropdownOpen.value
 };
 
-const logout = () => {
+const logout = async () => {
     dropdownOpen.value = false;
-    userStore.logout();
+    await userStore.logout();
     router.push({ name: 'Login'});
 };
 
