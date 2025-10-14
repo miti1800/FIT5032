@@ -9,9 +9,28 @@
         </div>
     </div>
     <div v-if="users.length > 0" class="card p-4 mx-4 mb-4 primary-color">
-        <h5 class="fw-bold">User Management</h5>
+        <div class="d-flex justify-content-between">
+            <h5 class="fw-bold">User Management</h5>
+            <div class="position-relative">
+                <button class="btn primary-btn px-3" @click="toggleDropdown">
+                    <i class="bi bi-file-earmark-arrow-down-fill fs-5 me-1"></i>
+                    Export
+                </button>
 
+                <div v-if="dropdownOpen" class="dropdown-menu-custom shadow-lg">
+                    <small class="dropdown-item" @click="exportCSVFile">
+                        <i class="bi bi-download me-2"></i>
+                        Export as CSV
+                    </small>
+                    <button class="dropdown-item small" @click="exportPDFFile">
+                        <i class="bi bi-download me-2"></i>
+                        Export as PDF
+                    </button>
+                </div>
+            </div>
+        </div>
         <DataTable 
+            ref="dt"
             :value="users"
             v-model:filters="filters"
             dataKey="userId"
@@ -24,7 +43,7 @@
             v-model:first="first"
             removableSort
             filterDisplay="menu"
-            :globalFilterFields="['firstName', 'lastName', 'role', 'email', 'dob', 'createdAt']"
+            :globalFilterFields="['firstName', 'lastName', 'role', 'email']"
             :loading="loading"
         >
             <template #header class="p-0">
@@ -67,25 +86,37 @@
                 </template>
             </Column>
 
-            <Column field="dob" header="Date of Birth" style="min-width: 10rem" filterField="dob" sortable
+            <Column field="dob" header="Date of Birth" style="min-width: 10rem" sortable
                 :showFilterMatchModes="false"
+                :filterFunction="dateFilterFn"
+                filterMatchMode="custom"
             >
                 <template #body="{ data }">
                     {{ formatDate(data.dob) }}
                 </template>
                 <template #filter="{ filterModel }">
-                    <DatePicker v-model="filterModel.value" placeholder="Select date" dateFormat="dd/mm/yy" />
+                    <DatePicker
+                        v-model="filterModel.value"
+                        placeholder="Select date"
+                        dateFormat="dd-mm-yy"
+                    />
                 </template>
             </Column>
 
-            <Column field="createdAt" header="Date Joined" style="min-width: 10rem" filterField="createdAt" sortable
+            <Column field="createdAt" header="Date Joined" style="min-width: 10rem" sortable
                 :showFilterMatchModes="false"
+                :filterFunction="dateFilterFn"
+                filterMatchMode="custom"
             >
                 <template #body="{ data }">
                     {{ formatDate(data.createdAt) }}
                 </template>
                 <template #filter="{ filterModel }">
-                <DatePicker v-model="filterModel.value" placeholder="Select date" dateFormat="dd/mm/yy" />
+                    <DatePicker
+                        v-model="filterModel.value"
+                        placeholder="Select date"
+                        dateFormat="dd-mm-yy"
+                    />
                 </template>
             </Column>
 
@@ -112,8 +143,19 @@ import DatePicker from 'primevue/datepicker'
 import { ref, onMounted } from 'vue';
 import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 
 const roles = ref(['user', 'nutritionist']);
+
+const dt = ref(null);
+
+const dropdownOpen = ref(false);
+
+const toggleDropdown = () => {
+    dropdownOpen.value = !dropdownOpen.value
+};
 
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -121,8 +163,16 @@ const filters = ref({
     lastName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
     role: { value: null, matchMode: FilterMatchMode.EQUALS },
     email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-    dob: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: 'dateIs' }] },
-    createdAt: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: 'dateIs' }] },
+    dob: {
+        operator: 'and',
+        constraints: [
+            { value: null, matchMode: FilterMatchMode.DATE_IS }
+        ]
+    },
+    createdAt: {
+        operator: 'and',
+        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
+    }
 });
 
 const users = ref([]);
@@ -132,7 +182,16 @@ const first = ref(0);
 
 const db = getFirestore();
 
-const filterPanel = ref();
+const dateFilterFn = (value, filter) => {
+  if (!filter || !value) return true;
+  const fv = new Date(filter);
+  const vv = new Date(value);
+  return (
+    fv.getFullYear() === vv.getFullYear() &&
+    fv.getMonth() === vv.getMonth() &&
+    fv.getDate() === vv.getDate()
+  );
+};
 
 const clearFilter = () => {
   Object.keys(filters.value).forEach(k => {
@@ -174,6 +233,66 @@ const formatDate = (date) => {
 
 const onDelete = (user) => {
   console.log('Deleting', user)
+};
+
+const exportCSVFile = () => {
+    const exportData = users.value.map(u => ({
+        "User ID": u.userId,
+        "First name": u.firstName,
+        "Last name": u.lastName,
+        "Email": u.email,
+        "Role": u.role,
+        "Date of birth": u.dob ? formatDate(u.dob) : '',
+        "Date joined": u.createdAt ? formatDate(u.createdAt) : ''
+    }));
+
+    const headers = Object.keys(exportData[0]);
+    const csvContent = [
+        headers.join(","),
+        ...exportData.map(row => headers.map(h => `"${row[h]}"`).join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "Users.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+const exportPDFFile = () => {
+  const doc = new jsPDF();
+
+  const columns = [
+    { header: 'User ID', dataKey: 'userId' },
+    { header: 'First name', dataKey: 'firstName' },
+    { header: 'Last name', dataKey: 'lastName' },
+    { header: 'Email', dataKey: 'email' },
+    { header: 'Role', dataKey: 'role' },
+    { header: 'Date of birth', dataKey: 'dob' },
+    { header: 'Date joined', dataKey: 'createdAt' }
+  ];
+
+  const title = "Users";
+  doc.setFontSize(18);
+  doc.text(title, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+
+  autoTable(doc, {
+    columns,
+    body: users.value.map(u => ({
+      ...u,
+      dob: u.dob ? formatDate(u.dob) : '',
+      createdAt: u.createdAt ? formatDate(u.createdAt) : '',
+    })),
+    startY: 30,
+    theme: 'grid',
+    headStyles: { fillColor: [40, 75, 99] },
+  });
+
+  doc.save('Users.pdf');
 };
 </script>
 

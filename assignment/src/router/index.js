@@ -81,20 +81,6 @@ const router = createRouter({
   routes
 });
 
-// router.beforeEach((to, from, next) => {
-//   const userStore = useUserStore();
 
-//   if (to.meta.requiresAuth) {
-//     if (!userStore.currentUser) {
-//       return next({ name: 'Login' })
-//     }
-
-//     if (to.meta.roles && !to.meta.roles.includes(userStore.currentUser.role)) {
-//       return next({ name: userStore.currentUser.role === "admin" ? 'AdminDashboard' : 'Dashboard' })
-//     }
-//   }
-  
-//   next();
-// });
 
 export default router;

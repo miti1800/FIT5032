@@ -9,9 +9,32 @@
         </div>
     </div>
     <div v-if="recipes.length > 0" class="card p-4 mx-4 mb-4 primary-color">
-        <h5 class="fw-bold">Recipes List</h5>
+        <div class="d-flex justify-content-between">
+            <h5 class="fw-bold">Recipes List</h5>
+            <div class="position-relative">
+                <button
+                    class="btn primary-btn"
+                    @click="toggleDropdown"
+                >
+                    <i class="bi bi-file-earmark-arrow-down-fill"></i>
+                    Export
+                </button>
+
+                <div v-if="dropdownOpen" class="dropdown-menu-custom shadow-lg">
+                    <small class="dropdown-item" @click="exportCSVFile">
+                        <i class="bi bi-download me-2"></i>
+                        Export as CSV
+                    </small>
+                    <button class="dropdown-item small" @click="exportPDFFile">
+                        <i class="bi bi-download me-2"></i>
+                        Export as PDF
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <DataTable 
+            ref="dt"
             :value="recipes"
             v-model:filters="filters"
             dataKey="recipeId"
@@ -24,7 +47,7 @@
             v-model:first="first"
             removableSort
             filterDisplay="menu"
-            :globalFilterFields="['firstName', 'lastName', 'role', 'email', 'dob', 'createdAt']"
+            :globalFilterFields="['recipe_name', 'cuisine_path', 'avgRating', 'author_name']"
             :loading="loading"
         >
             <template #header class="p-0">
@@ -40,7 +63,7 @@
             <template #empty> No recipes found. </template>
             <template #loading> Loading recipe data... </template>
 
-            <Column header="Recipe Name" filterField="recipe_name" sortable>
+            <Column field="recipe_name" header="Recipe Name" filterField="recipe_name" sortable>
                 <template #body="{ data }">
                     <div class="d-flex align-items-center gap-2">
                         <img :alt="data.recipe_name" :src="data.image" style="width: 50px;height:50px" />
@@ -48,44 +71,45 @@
                     </div>
                 </template>
                 <template #filter="{ filterModel }">
-                <InputText v-model="filterModel.value" placeholder="Search by Last Name" />
+                    <InputText v-model="filterModel.value" placeholder="Search by recipe name" />
                 </template>
             </Column>
 
-            <Column field="cuisine_path" header="Category" filterField="cuisine_path" sortable 
-                :showFilterMatchModes="false"
-                filterMatchMode="equals"
-            >
+            <Column field="cuisine_path" header="Category" filterField="cuisine_path" sortable>
                 <template #filter="{ filterModel }">
-                <Select v-model="filterModel.value" :options="roles" placeholder="Select Role" showClear />
+                    <InputText v-model="filterModel.value" placeholder="Search by category" />
                 </template>
             </Column>
 
-            <Column header="Ratings" filterField="rating" sortable>
+            <Column field="avgRating" header="Ratings" filterField="avgRating" sortable
+                    :showFilterMatchModes="false"
+            >
                 <template #body="slotProps">
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-star-fill warning-color"></i>
                         <span>
-                        {{ averageRating(slotProps.data.rating) }}
+                            {{ Number(slotProps.data.avgRating).toFixed(1) }}
                         </span>
                     </div>
                 </template>
                 <template #filter="{ filterModel }">
-                <InputText v-model="filterModel.value" placeholder="Search by Email" />
+                    <InputText v-model.number="filterModel.value" placeholder="Search by rating" />
                 </template>
             </Column>
 
             <Column field="author_name" header="Author Name" filterField="author_name" sortable>
                 <template #filter="{ filterModel }">
-                <InputText v-model="filterModel.value" placeholder="Search by Email" />
+                    <InputText v-model="filterModel.value" placeholder="Search by Author name" />
                 </template>
             </Column>
 
-            <Column header="Posted on" style="min-width: 10rem" filterField="posted_by" sortable
+            <Column field="postedBy" header="Posted on" style="min-width: 10rem" sortable
                 :showFilterMatchModes="false"
+                :filterFunction="dateFilterFn"
+                filterMatchMode="custom"
             >
                 <template #body="{ data }">
-                    {{ formatDate(data.posted_by) }}
+                    {{ formatDate(data.postedBy) }}
                 </template>
                 <template #filter="{ filterModel }">
                     <DatePicker v-model="filterModel.value" placeholder="Select date" dateFormat="dd/mm/yy" />
@@ -110,6 +134,7 @@
 
 <script setup>
 import DataTable from 'primevue/datatable'
+import Dropdown from 'primevue/dropdown';
 import Column from 'primevue/column'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
@@ -120,19 +145,19 @@ import DatePicker from 'primevue/datepicker'
 import { ref, onMounted } from 'vue';
 import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
-
-const roles = ref(['user', 'nutritionist']);
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    firstName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    lastName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    role: { value: null, matchMode: FilterMatchMode.EQUALS },
-    email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-    dob: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: 'dateIs' }] },
-    createdAt: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: 'dateIs' }] },
+    recipe_name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+    cuisine_path: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+    avgRating: { value: null, matchMode: FilterMatchMode.EQUALS },
+    author_name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+    posted_by: { operator: 'and', constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
 });
 
+const dt = ref(null);
 const recipes = ref([]);
 const loading = ref(true);
 
@@ -140,7 +165,22 @@ const first = ref(0);
 
 const db = getFirestore();
 
-const filterPanel = ref();
+const dropdownOpen = ref(false);
+
+const toggleDropdown = () => {
+    dropdownOpen.value = !dropdownOpen.value
+};
+
+const dateFilterFn = (value, filter) => {
+  if (!filter || !value) return true;
+  const fv = new Date(filter);
+  const vv = new Date(value);
+  return (
+    fv.getFullYear() === vv.getFullYear() &&
+    fv.getMonth() === vv.getMonth() &&
+    fv.getDate() === vv.getDate()
+  );
+};
 
 const clearFilter = () => {
   Object.keys(filters.value).forEach(k => {
@@ -160,7 +200,8 @@ onMounted(async () => {
             return {
             recipeId: doc.id,
             ...data,
-            posted_by: data.posted_on?.seconds ? new Date(data.posted_on.seconds * 1000) : null,
+            avgRating: averageRating(data.rating),
+            postedBy: data.posted_on?.seconds ? new Date(data.posted_on.seconds * 1000) : null,
             };
         })
     } catch (error) {
@@ -183,9 +224,73 @@ const onDelete = (user) => {
 };
 
 const averageRating = (ratings) => {
-  if (!ratings || ratings.length === 0) return '0.0';
+  if (!ratings || ratings.length === 0) return 0;
   const sum = ratings.reduce((acc, r) => acc + r, 0);
-  return (sum / ratings.length).toFixed(1);
+  return (sum / ratings.length);
+};
+
+const exportCSVFile = () => {
+    const exportData = recipes.value.map(r => ({
+        "Recipe name": r.recipe_name,
+        "Category": r.cuisine_path,
+        "Rating": r.avgRating.toFixed(1),
+        "Author": r.author_name,
+        "Posted on": r.postedBy ? formatDate(r.postedBy) : '', 
+        "Prep time": r.prep_time,
+        "Cook time": r.cook_time,
+        "Total time": r.total_time,
+        "Servings": r.servings
+    }));
+
+    const headers = Object.keys(exportData[0]);
+    const csvContent = [
+        headers.join(","),
+        ...exportData.map(row => headers.map(h => `"${row[h]}"`).join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "Recipes.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+const exportPDFFile = () => {
+  const doc = new jsPDF();
+
+  const columns = [
+    { header: 'Recipe Name', dataKey: 'recipe_name' },
+    { header: 'Category', dataKey: 'cuisine_path' },
+    { header: 'Rating', dataKey: 'avgRating' },
+    { header: 'Author', dataKey: 'author_name' },
+    { header: 'Posted On', dataKey: 'postedBy' },
+    { header: 'Prep time', dataKey: 'prep_time' },
+    { header: 'Cook time', dataKey: 'cook_time' },
+    { header: 'Total time', dataKey: 'total_time' },
+    { header: 'Servings', dataKey: 'servings' }
+  ];
+
+  const title = "Recipes";
+  doc.setFontSize(18);
+  doc.text(title, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+
+  autoTable(doc, {
+    columns,
+    body: recipes.value.map(r => ({
+      ...r,
+      avgRating: r.avgRating.toFixed(1),
+      postedBy: r.postedBy ? formatDate(r.postedBy) : '',
+    })),
+    startY: 30,
+    theme: 'grid',
+    headStyles: { fillColor: [40, 75, 99] },
+  });
+
+  doc.save('Recipes.pdf');
 };
 </script>
 

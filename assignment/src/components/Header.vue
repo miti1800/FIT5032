@@ -54,7 +54,6 @@
             @click="toggleDropdown"
         >
             <strong>{{userStore.currentUser.firstName[0] }}{{ userStore.currentUser.lastName[0] }}</strong>
-            <!-- <img :src="profile" alt="profile" class="avatar"/> -->
         </button>
 
         <div v-if="dropdownOpen" class="dropdown-menu-custom shadow-lg">
@@ -128,32 +127,6 @@ const toggleMenu = () => {
   height: 38px;
   border-radius: 8px;
   object-fit: cover;
-}
-
-.dropdown-menu-custom {
-  position: absolute;
-  top: 110%;
-  right: 0;
-  min-width: 200px;
-  background: var(--white);
-  border-radius: 8px;
-  overflow: hidden;
-  z-index: 1000;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  background: transparent;
-  border: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-}
-
-.dropdown-item:hover {
-  background: var(--secondary);
 }
 
 .app-logo {
