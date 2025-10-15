@@ -1,17 +1,18 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ContactUsView from '@/views/ContactUsView.vue'
-import LoginView from '@/views/LoginView.vue'
-import RegisterView from '@/views/RegisterView.vue'
-import DashboardView from '@/views/user/DashboardView.vue'
-import AdminDashboardView from '@/views/admin/AdminDashboardView.vue'
-import RecipeDetailView from '@/views/RecipeDetailView.vue'
-import { useUserStore } from '@/stores/user'
-import UserManagementView from '@/views/admin/UserManagementView.vue'
-import PageNotFoundView from '@/views/PageNotFoundView.vue'
-import ForgotPassword from '@/views/ForgotPassword.vue'
-import RecipesListView from '@/views/admin/RecipesListView.vue'
-import { auth } from '@/firebaseconfig'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import ContactUsView from '@/views/ContactUsView.vue';
+import LoginView from '@/views/LoginView.vue';
+import RegisterView from '@/views/RegisterView.vue';
+import DashboardView from '@/views/user/DashboardView.vue';
+import AdminDashboardView from '@/views/admin/AdminDashboardView.vue';
+import RecipeDetailView from '@/views/RecipeDetailView.vue';
+import { useUserStore } from '@/stores/user';
+import UserManagementView from '@/views/admin/UserManagementView.vue';
+import PageNotFoundView from '@/views/PageNotFoundView.vue';
+import ForgotPassword from '@/views/ForgotPassword.vue';
+import RecipesListView from '@/views/admin/RecipesListView.vue';
+import { auth } from '@/firebaseconfig';
+import QueriesView from '@/views/admin/QueriesView.vue';
 
 const routes = [
   {
@@ -53,17 +54,23 @@ const routes = [
     meta: { requiresAuth: true, roles: ["admin"] }
   },
   {
+    path: '/admin/recipes-list',
+    name: 'Recipe List',
+    component: RecipesListView,
+    meta: { requiresAuth: true, roles: ["admin"] }
+  },
+  {
+    path: '/admin/queries',
+    name: 'Queries',
+    component: QueriesView,
+    meta: { requiresAuth: true, roles: ["admin"] }
+  },
+  {
     path: '/recipe/:id',
     name: 'RecipeDetailView',
     component: RecipeDetailView,
     props: true,
     meta: { requiresAuth: true, roles: ["user", "admin"] }
-  },
-  {
-    path: '/admin/recipes-list',
-    name: 'Recipe List',
-    component: RecipesListView,
-    meta: { requiresAuth: true, roles: ["admin"] }
   },
   {
     path: '/forgot-password',

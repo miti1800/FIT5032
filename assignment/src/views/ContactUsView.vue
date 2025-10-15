@@ -56,22 +56,6 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="tel" class="form-control" id="phone" placeholder="Enter your mobile no" 
-                                        @blur="() => validatePhone(true)"
-                                        @input="() => validatePhone(false)"
-                                        v-model="formData.phone"
-                                        :class="{
-                                            invalid: errors.phone != null
-                                        }"
-                                    />
-                                    <div v-if="errors.phone" class="error-box py-1 px-2 my-1 small d-flex align-items-center">
-                                        <i class="bi bi-exclamation-circle error-color fs-6 me-2"></i>
-                                        {{ errors.phone }}
-                                    </div>
-                                </div>
-
                                 <div class="mb-4">
                                     <label for="message" class="form-label">Message
                                         <span class="error-color">*</span>
@@ -106,7 +90,10 @@
 import { ref } from 'vue';
 import contact from '@/assets/images/contact_us.png';
 import { useToast } from 'primevue/usetoast';
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
 
+const db = getFirestore();
 const toast = useToast();
 
 const showSuccess = () => {
@@ -116,18 +103,41 @@ const showSuccess = () => {
 const formData = ref({
     name: '',
     email: '',
-    phone: '',
     message: ''
 });
 
-const submitForm = () => {
+const submitForm = async () => {
     validateName(true);
     validateEmail(true);
-    validatePhone(true);
     validateMessage(true);
-    if(!errors.value.name && !errors.value.email && !errors.value.phone && !errors.value.message) {
-        showSuccess();
-        clearForm();
+    if(!errors.value.name && !errors.value.email && !errors.value.message) {
+        try {
+            const functions = getFunctions();
+            const sendContactEmail = httpsCallable(functions, "sendContactEmail");
+
+            const result = await sendContactEmail({
+                name: formData.value.name,
+                email: formData.value.email,
+                message: formData.value.message,
+                subject: "Contact Us Form Submission"
+            });
+            if(result.data.success){
+                showSuccess();
+
+                await addDoc(collection(db, "queries"), {
+                    name: formData.value.name,
+                    email: formData.value.email,
+                    message: formData.value.message,
+                    status: "Unresolved",
+                    createdAt: serverTimestamp()
+                });
+                
+                clearForm();
+            }
+        } catch (err) {
+            console.error("Error sending email:", err);
+            toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to send request!', life: 5000 });
+        }
     }
 };
 
@@ -135,7 +145,6 @@ const clearForm = () => {
     formData.value = {
         name: '',
         email: '',
-        phone: '',
         message: ''
     };
 };
@@ -143,12 +152,11 @@ const clearForm = () => {
 const errors = ref({
     name: null,
     email: null,
-    phone: null,
     message: null
 });
 
 const validateName = (blur) => {
-    const hasOnlyAlphabets = /^[A-Za-z']+$/.test(formData.value.name);
+    const hasOnlyAlphabets = /^[A-Za-z' ]+$/.test(formData.value.name);
     if (formData.value.name.length < 3) {
         if(blur) errors.value.name = "Name must be atleast 3 characters.";
     }
@@ -168,19 +176,6 @@ const validateEmail = (blur) => {
         if(blur) errors.value.email = "Email is not valid.";
     } else {
         errors.value.email = null;
-    }
-}
-
-const validatePhone = (blur) => {
-    if(formData.value.phone.length != 0) {
-        const isValidPhone = /^(\+61\s?|0)[2-478](\s?\d){8}$/.test(formData.value.phone);
-        if (!isValidPhone) {
-            if(blur) errors.value.phone = "Phone number is not valid australian number.";
-        } else {
-            errors.value.phone = null;
-        }
-    } else {
-        errors.value.phone = null;
     }
 }
 
