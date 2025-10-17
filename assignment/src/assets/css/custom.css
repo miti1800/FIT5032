@@ -327,3 +327,11 @@ body {
 .dropdown-item:hover {
   background: var(--secondary);
 }
+
+.border-radius8 {
+  border-radius: 8px;
+}
+
+.gm-style-iw .gm-ui-hover-effect {
+    display: none !important;
+}

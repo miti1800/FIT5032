@@ -11,8 +11,9 @@ import UserManagementView from '@/views/admin/UserManagementView.vue';
 import PageNotFoundView from '@/views/PageNotFoundView.vue';
 import ForgotPassword from '@/views/ForgotPassword.vue';
 import RecipesListView from '@/views/admin/RecipesListView.vue';
-import { auth } from '@/firebaseconfig';
+import { auth } from '@/firebaseConfig';
 import QueriesView from '@/views/admin/QueriesView.vue';
+import RestaurantsView from '@/views/user/RestaurantsView.vue';
 
 const routes = [
   {
@@ -71,6 +72,12 @@ const routes = [
     component: RecipeDetailView,
     props: true,
     meta: { requiresAuth: true, roles: ["user", "admin"] }
+  },
+  {
+    path: '/restaurants',
+    name: 'Restaurants',
+    component: RestaurantsView,
+    meta: { requiresAuth: true, roles: ["user"] }
   },
   {
     path: '/forgot-password',
