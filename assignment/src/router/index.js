@@ -15,6 +15,7 @@ import { auth } from '@/firebaseConfig';
 import QueriesView from '@/views/admin/QueriesView.vue';
 import RestaurantsView from '@/views/user/RestaurantsView.vue';
 import RecipesView from '@/views/user/RecipesView.vue';
+import PostRecipeView from '@/views/user/PostRecipeView.vue';
 
 const routes = [
   {
@@ -41,7 +42,7 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: DashboardView,
-    meta: { requiresAuth: true, roles: ["user"] }
+    meta: { requiresAuth: true, roles: ["user", "nutritionist"] }
   },
   {
     path: '/admin/dashboard',
@@ -71,20 +72,26 @@ const routes = [
     path: '/recipes',
     name: 'Recipes',
     component: RecipesView,
-    meta: { requiresAuth: true, roles: ["user"] }
+    meta: { requiresAuth: true, roles: ["user", "nutritionist"] }
+  },
+  {
+    path: '/post-recipe',
+    name: 'Post Recipe',
+    component: PostRecipeView,
+    meta: { requiresAuth: true, roles: ["nutritionist"] }
   },
   {
     path: '/recipe/:id',
     name: 'RecipeDetailView',
     component: RecipeDetailView,
     props: true,
-    meta: { requiresAuth: true, roles: ["user", "admin"] }
+    meta: { requiresAuth: true, roles: ["user", "nutritionist", "admin"] }
   },
   {
     path: '/restaurants',
     name: 'Restaurants',
     component: RestaurantsView,
-    meta: { requiresAuth: true, roles: ["user"] }
+    meta: { requiresAuth: true, roles: ["user", "nutritionist"] }
   },
   {
     path: '/forgot-password',
@@ -131,7 +138,7 @@ router.beforeEach(async (to, from, next) => {
     if (!currentUser || !allowedRoles.includes(currentUser.role)) {
       if (currentUser?.role === 'admin') {
         return next({ name: 'Admin Dashboard' })
-      } else if (currentUser?.role === 'user') {
+      } else if (currentUser?.role === 'user' || currentUser?.role === 'nutritionist') {
         return next({ name: 'Dashboard' })
       } else {
         return next({ name: 'Login' })

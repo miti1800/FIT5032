@@ -57,6 +57,7 @@ const navItems = [
   { name: "Dashboard", icon: "bi bi-speedometer", path: "/admin/dashboard", role: ["admin"] },
   { name: "User Management", icon: "bi bi-people-fill", path: "/admin/user-management", role: ["admin"] },
   { name: "Recipes", icon: "bi bi-book-fill", path: "/recipes", role: ["user", "nutritionist"] },
+  { name: "Post Recipe", icon: "bi bi-pen-fill", path: "/post-recipe", role: ["nutritionist"] },
   { name: "Recipes", icon: "bi bi-book-fill", path: "/admin/recipes-list", role: ["admin"] },
   { name: "Queries", icon: "bi bi-question-square-fill", path: "/admin/queries", role: ["admin"] },
   { name: "Restaurants", icon: "bi bi-fork-knife", path: "/restaurants", role: ["user", "nutritionist"] },

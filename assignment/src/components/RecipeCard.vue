@@ -2,9 +2,9 @@
     <div class="card recipe-card h-100 p-4 primary-color mx-2 my-4" @click="goToDetail">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="mt-auto d-flex align-items-center">
-                <img :src="recipe.author.photo" :alt="recipe.author.name" class="avatar-btn avatar me-2">
+                <div class="secondary-bg p-2 me-2 border-radius8 fw-bold">{{ recipe.author_name.split(' ').map(n => n[0]).join('').toUpperCase() }}</div>
                 <div class="">
-                    <div class="fw-bold">{{ recipe.author.name }}</div>
+                    <div class="fw-bold">{{ recipe.author_name }}</div>
                     <small>{{ recipe.posted_by }}</small>
                 </div>
             </div>
@@ -81,7 +81,7 @@ const averageRating = computed(() => {
 });
 
 const goToDetail = () => {
-  router.push({ name: 'RecipeDetailView', params: { id: props.recipe.id } });
+  router.push({ name: 'RecipeDetailView', params: { id: props.recipe.recipeId } });
 };
 </script>
 

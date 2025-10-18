@@ -95,6 +95,12 @@ body {
   font-weight: bold;
 }
 
+.secondary-btn:disabled {
+  color: #c9c9c9;
+  background-color: transparent;
+  border: 2px solid #c9c9c9;
+}
+
 .secondary-btn:hover {
   color: var(--secondary);
   background-color: var(--primary);

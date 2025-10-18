@@ -13,7 +13,7 @@
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div>
                         <h4 class="fw-bold mb-0">{{ recipe.recipe_name }}</h4>
-                        <small>Posted {{ recipe.posted_by }}</small>
+                        <small>Posted on {{ formatDate(recipe.posted_on?.seconds ? new Date(recipe.posted_on.seconds * 1000) : null) }}</small>
                     </div>
                     <div v-if="isAdmin" class="d-flex align-items-center">
                         <i class="bi bi-pencil-square fs-4 me-2"></i>
@@ -217,6 +217,8 @@ onMounted(async () => {
     const recipeDoc = await getDoc(doc(db, "recipes", recipeId));
     recipe.value = { recipeId, ...recipeDoc.data() };
     hasUserRated.value = recipe.value.user_id.includes(userStore.currentUser.user_id);
+
+    console.log(recipe.value);
 });
 
 const handleRatingAdded = (rating) => {
@@ -226,7 +228,15 @@ const handleRatingAdded = (rating) => {
         recipe.value.user_id.push(userStore.currentUser.user_id)
     }
     console.log(`User rated the recipe: ${rating} stars`);
-}
+};
+
+const formatDate = (date) => {
+  if (!(date instanceof Date)) return '-';
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
 </script>
 
 <style scoped>
