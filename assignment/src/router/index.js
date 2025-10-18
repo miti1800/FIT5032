@@ -14,6 +14,7 @@ import RecipesListView from '@/views/admin/RecipesListView.vue';
 import { auth } from '@/firebaseConfig';
 import QueriesView from '@/views/admin/QueriesView.vue';
 import RestaurantsView from '@/views/user/RestaurantsView.vue';
+import RecipesView from '@/views/user/RecipesView.vue';
 
 const routes = [
   {
@@ -65,6 +66,12 @@ const routes = [
     name: 'Queries',
     component: QueriesView,
     meta: { requiresAuth: true, roles: ["admin"] }
+  },
+  {
+    path: '/recipes',
+    name: 'Recipes',
+    component: RecipesView,
+    meta: { requiresAuth: true, roles: ["user"] }
   },
   {
     path: '/recipe/:id',

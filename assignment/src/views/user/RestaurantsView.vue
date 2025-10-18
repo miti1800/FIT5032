@@ -12,15 +12,17 @@
                 <div class="map-wrapper px-2">
                     <div class="search-bar d-flex align-items-center mb-4">
                         <input type="text" v-model="locationQuery" ref="locationInput" class="form-control me-4"
-                            placeholder="Enter your location" />
-                        <!-- <select v-model="selectedRadius" class="form-select me-2" style="width: 120px;">
-                            <option value="1000">1 km</option>
-                            <option value="2000">2 km</option>
-                            <option value="3000">3 km</option>
-                            <option value="5000">5 km</option>
-                            <option value="10000">10 km</option>
-                        </select> -->
-                        <button class="btn primary-btn" @click="searchLocation">Search</button>
+                            placeholder="Enter your location">
+                            <button
+                                v-if="locationQuery"
+                                @click="clearLocation"
+                                class="clear-btn"
+                                type="button"
+                            >
+                                <i class="bi bi-x-circle-fill"></i>
+                            </button>
+                        </input>
+                        <button class="btn primary-btn w-25" @click="searchLocation" :disabled="!userLocation">Search Restaurants</button>
                     </div>
                     <div id="map" class="map border-radius8 px-2"></div>
                 </div>
@@ -83,6 +85,8 @@ export default {
             this.map.setCenter(location);
             this.userLocation = location;
 
+            this.locationQuery = place.formatted_address || place.name || '';
+
             if (this.userMarker) this.userMarker.setMap(null);
             this.userMarker = new google.maps.Marker({
                 map: this.map,
@@ -100,13 +104,15 @@ export default {
     },
     methods: {
         async searchLocation() {
-            if (!this.locationQuery) {
-                alert("Please enter a location first.");
+            if (!this.userLocation) {
+                alert("Please select a location from the suggestions first.");
                 return;
             }
 
-            this.clearMarkers(true);
+            // Clear previous restaurants & routes
+            this.clearMarkers();
 
+            // Search restaurants near the selected location
             this.findHealthyRestaurants(this.userLocation);
         },
 
@@ -210,6 +216,8 @@ export default {
                         strokeWeight: 6
                     }
                 });
+
+                this.directionsRenderer.setMap(this.map);
             }
 
             // Close info window
@@ -217,6 +225,63 @@ export default {
                 this.infoWindow.close();
             }
         },
+
+        clearLocation() {
+            this.locationQuery = "";
+            this.userLocation = null;
+            this.clearMarkers(true);
+
+            // 🔥 Reinitialize the map completely
+            this.map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: -37.814, lng: 144.963 },
+                zoom: 13,
+            });
+
+            // Recreate dependent services and renderer
+            this.placesService = new google.maps.places.PlacesService(this.map);
+            this.directionsService = new google.maps.DirectionsService();
+            this.directionsRenderer = new google.maps.DirectionsRenderer({
+                map: this.map,
+                suppressMarkers: true,
+                polylineOptions: {
+                strokeColor: "#284B63",
+                strokeOpacity: 1,
+                strokeWeight: 6,
+                },
+            });
+
+            this.infoWindow = new google.maps.InfoWindow({ maxWidth: 300 });
+
+            // ✅ Reattach autocomplete input to new map
+            const input = this.$refs.locationInput;
+            const autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo("bounds", this.map);
+
+            autocomplete.addListener("place_changed", () => {
+                const place = autocomplete.getPlace();
+                if (!place.geometry) return alert("No details available for this place.");
+
+                const location = place.geometry.location;
+                this.map.setCenter(location);
+                this.userLocation = location;
+                this.locationQuery = place.formatted_address || place.name || "";
+
+                if (this.userMarker) this.userMarker.setMap(null);
+                this.userMarker = new google.maps.Marker({
+                map: this.map,
+                position: location,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 10,
+                    fillColor: "#EA4335",
+                    fillOpacity: 1,
+                    strokeWeight: 2,
+                    strokeColor: "#fff",
+                },
+                });
+            });
+        }
+
     },
 };
 </script>
@@ -232,7 +297,27 @@ export default {
     height: 100%;
 }
 
-.search-bar {}
+.clear-btn {
+  position: absolute;
+  right: 9%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  font-size: 23px;
+  color: #888;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.clear-btn:hover {
+  color: var(--primary);
+}
+
+.search-bar {
+    position: relative;
+}
 
 .search-bar input {}
 </style>
