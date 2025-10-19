@@ -21,7 +21,7 @@
         <div class="row d-flex justify-content-evenly flex-wrap mb-4">
             <RecipeCard
                 v-for="recipe in recipes" 
-                :key="recipe.id" 
+                :key="recipe.recipeId" 
                 :recipe="recipe"
             />
         </div>
