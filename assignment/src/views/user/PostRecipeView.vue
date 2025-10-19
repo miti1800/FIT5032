@@ -470,7 +470,7 @@ const handleSubmit = async () => {
         }
 
         const obj = {
-            author_id: userStore.currentUser.id,
+            author_id: userStore.currentUser.userId,
             author_name: userStore.currentUser.firstName + ' ' + userStore.currentUser.lastName,
             cook_time: formData.value.cook_time,
             cuisine_path: nutrition.category,
@@ -489,6 +489,7 @@ const handleSubmit = async () => {
             user_id: []
         }
 
+        console.log("objected creadted", obj);
         try {
             const docRef = await addDoc(collection(db, "recipes"), {
                 ...obj,
