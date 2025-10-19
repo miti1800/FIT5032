@@ -32,7 +32,7 @@ export const notifyUsersOnNewRecipe = onDocumentCreated(
       console.log(`Sending email to ${recipients.length} users`);
 
       const { recipe_name, image, author_name } = recipeData;
-      const recipeUrl = `https://yourwebsite.com/login`; // Replace with real link
+      const recipeUrl = "https://fit-5032-hazel.vercel.app/login";
 
       const htmlContent = `
 <!DOCTYPE html>

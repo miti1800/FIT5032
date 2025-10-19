@@ -94,7 +94,7 @@ export const sendContactEmail = onCall(
                 <p style="font-size:16px;">Thank you for reaching out to NutriEd!</p>
                 <p style="margin-top:5px;">We’ve received your message and our team will get back to you within 1–2 business days.</p>
                 <p style="margin-top:15px;">If your inquiry is urgent, please don’t hesitate to call us directly at <b>0468 349 590</b> — we’re always happy to help.</p>
-                <p style="margin-top:15px;">In the meantime, feel free to explore nutritious recipes on https://nutried.com.</p>
+                <p style="margin-top:15px;">In the meantime, feel free to explore nutritious recipes on https://fit-5032-hazel.vercel.app/login.</p>
                 <p style="margin-top:20px;">We’ve also attached a copy of your query for your records.</p>
                 <p style="margin-top:30px;">Warm regards,<br/><b>Team NutriEd</b></p>
               </td>

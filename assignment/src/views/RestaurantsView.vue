@@ -109,10 +109,8 @@ export default {
                 return;
             }
 
-            // Clear previous restaurants & routes
             this.clearMarkers();
 
-            // Search restaurants near the selected location
             this.findHealthyRestaurants(this.userLocation);
         },
 
@@ -164,7 +162,6 @@ export default {
                                     this.infoWindow.setContent(content);
                                     this.infoWindow.open(this.map, marker);
 
-                                    // Attach click event to close button
                                     content.querySelector('#close-btn').addEventListener('click', () => {
                                         this.infoWindow.close();
                                     });
@@ -194,17 +191,14 @@ export default {
         },
 
         clearMarkers(removeUserMarker = false) {
-            // Remove restaurant markers
             this.restaurantMarkers.forEach((m) => m.setMap(null));
             this.restaurantMarkers = [];
 
-            // Optionally remove user marker (only when changing search location)
             if (removeUserMarker && this.userMarker) {
                 this.userMarker.setMap(null);
                 this.userMarker = null;
             }
 
-            // Reset route renderer fully
             if (this.directionsRenderer) {
                 this.directionsRenderer.setMap(null);
                 this.directionsRenderer = new google.maps.DirectionsRenderer({
@@ -220,7 +214,6 @@ export default {
                 this.directionsRenderer.setMap(this.map);
             }
 
-            // Close info window
             if (this.infoWindow) {
                 this.infoWindow.close();
             }
@@ -231,13 +224,11 @@ export default {
             this.userLocation = null;
             this.clearMarkers(true);
 
-            // 🔥 Reinitialize the map completely
             this.map = new google.maps.Map(document.getElementById("map"), {
                 center: { lat: -37.814, lng: 144.963 },
                 zoom: 13,
             });
 
-            // Recreate dependent services and renderer
             this.placesService = new google.maps.places.PlacesService(this.map);
             this.directionsService = new google.maps.DirectionsService();
             this.directionsRenderer = new google.maps.DirectionsRenderer({
@@ -252,7 +243,6 @@ export default {
 
             this.infoWindow = new google.maps.InfoWindow({ maxWidth: 300 });
 
-            // ✅ Reattach autocomplete input to new map
             const input = this.$refs.locationInput;
             const autocomplete = new google.maps.places.Autocomplete(input);
             autocomplete.bindTo("bounds", this.map);

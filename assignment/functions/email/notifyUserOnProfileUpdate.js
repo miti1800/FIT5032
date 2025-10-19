@@ -27,7 +27,7 @@ export const notifyUserOnProfileUpdate = onCall(
           <p>We’re excited to inform you that your <b>Professional Dietitian</b> application has been <b>approved</b>.</p>
           <p>You can now log in to your NutriEd dashboard and start exploring tools and sharing recipes.</p>
           <p style="margin-top:15px;">Click below to access your account:</p>
-          <p><a href="https://nutried.web.app/login" 
+          <p><a href="https://fit-5032-hazel.vercel.app/login" 
                 style="display:inline-block;background-color:#284B63;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;margin-top:10px;">
                 Go to Dashboard
               </a></p>

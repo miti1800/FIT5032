@@ -84,6 +84,11 @@
             </div>
         </div>
     </div>
+
+    <div v-if="loading" class="text-center p-5 loader-overlay">
+        <span class="spinner-border me-2" role="status"></span>
+        <p class="mt-2">Loading...</p>
+    </div>
 </template>
 
 <script setup>
@@ -95,6 +100,7 @@ import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/fire
 
 const db = getFirestore();
 const toast = useToast();
+const loading = ref(false);
 
 const showSuccess = () => {
   toast.add({ severity: 'success', summary: 'Success', detail: 'Message sent!', life: 3000 });
@@ -111,6 +117,7 @@ const submitForm = async () => {
     validateEmail(true);
     validateMessage(true);
     if(!errors.value.name && !errors.value.email && !errors.value.message) {
+        loading.value = true;
         try {
             const functions = getFunctions();
             const sendContactEmail = httpsCallable(functions, "sendContactEmail");
@@ -137,6 +144,8 @@ const submitForm = async () => {
         } catch (err) {
             console.error("Error sending email:", err);
             toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to send request!', life: 5000 });
+        } finally {
+            loading.value = false;
         }
     }
 };
