@@ -25,7 +25,7 @@ const closeSidebar = () => {
 <template>
   <div class="app-layout d-flex min-vh-100">
     <Sidebar
-      v-if="userStore.currentUser"
+      v-if="userStore.currentUser && userStore.currentUser.status == 'Active'"
       :is-open="showSidebar"
       @close-sidebar="closeSidebar"
       @toggle-sidebar="toggleSidebar"

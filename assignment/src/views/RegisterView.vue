@@ -324,6 +324,8 @@ const handleRegistration = async () => {
                 dob: formData.value.dob,
                 email: DOMPurify.sanitize(formData.value.email),
                 createdAt: new Date(),
+                status: "Setup pending",
+                subscribe: false,
                 role: "user"
             });
 
@@ -335,9 +337,11 @@ const handleRegistration = async () => {
                 lastName: DOMPurify.sanitize(formData.value.lastName),
                 email: DOMPurify.sanitize(formData.value.email),
                 dob: formData.value.dob,
+                status: "Setup pending",
+                subscribe: false,
                 role: "user"
             });
-            router.push({ name: 'Dashboard' });
+            router.push({ name: 'Setup Profile' });
             clearForm();        
         } catch (error) {
             errors.value.firebase = getFirebaseErrorMessage(error.code);

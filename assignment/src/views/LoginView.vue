@@ -174,7 +174,7 @@ const handleLogin = async () => {
             const userDoc = await getDoc(doc(db, "users", user.uid));
 
             if (userDoc.exists()) {
-                const userData = { id: user.uid, ...userDoc.data() };
+                const userData = { userId: user.uid, ...userDoc.data() };
 
                 userStore.setUser(userData);
 
@@ -190,7 +190,11 @@ const handleLogin = async () => {
                     router.push({ name: 'Admin Dashboard'});
                 }
                 else {
-                    router.push({ name: 'Dashboard' });
+                    if(userData.status == "Active") {
+                        router.push({ name: 'Dashboard' });
+                    } else {
+                        router.push({ name: 'Setup Profile' });
+                    }
                 }
                 
                 clearForm();

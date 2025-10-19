@@ -138,7 +138,7 @@
             <Column header="Action">
                 <template #body="slotProps">
                     <button v-if="slotProps.data.status=='Unresolved'" class="icon-btn" @click="onResolve(slotProps.data)">
-                        <i class="bi bi-check-square-fill primary-color fs-5"></i>
+                        <i class="bi bi-check-square-fill success-color fs-5"></i>
                     </button>
                     <span v-else class="px-3">-</span>
                 </template>

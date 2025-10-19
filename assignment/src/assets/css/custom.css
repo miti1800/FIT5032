@@ -58,7 +58,15 @@ body {
   display: flex;
   align-items: center;
   background-color: var(--warningBg);
-  color: var(--warning);
+  color: #E49B0F;
+  border-radius: 8px;
+}
+
+.gray-box {
+  display: flex;
+  align-items: center;
+  background-color: var(--grayBg);
+  color: var(--primary);
   border-radius: 8px;
 }
 
@@ -339,5 +347,10 @@ body {
 }
 
 .gm-style-iw .gm-ui-hover-effect {
-    display: none !important;
+  display: none !important;
+}
+
+.form-check-input:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
 }

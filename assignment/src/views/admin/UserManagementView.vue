@@ -43,7 +43,7 @@
             v-model:first="first"
             removableSort
             filterDisplay="menu"
-            :globalFilterFields="['firstName', 'lastName', 'role', 'email']"
+            :globalFilterFields="['firstName', 'lastName', 'role', 'email', 'status', 'apdNumber']"
             :loading="loading"
         >
             <template #header class="p-0">
@@ -86,20 +86,28 @@
                 </template>
             </Column>
 
-            <Column field="dob" header="Date of Birth" style="min-width: 10rem" sortable
+            <Column field="status" header="Status" filterField="status" sortable 
                 :showFilterMatchModes="false"
-                :filterFunction="dateFilterFn"
-                filterMatchMode="custom"
+                filterMatchMode="equals"
             >
-                <template #body="{ data }">
-                    {{ formatDate(data.dob) }}
+                <template #body="slotProps">
+                    <div class="d-flex">
+                        <div class="px-2" 
+                            :class="getStatusBox(slotProps.data.status)"
+                        >{{ slotProps.data.status }}</div>
+                    </div>
                 </template>
                 <template #filter="{ filterModel }">
-                    <DatePicker
-                        v-model="filterModel.value"
-                        placeholder="Select date"
-                        dateFormat="dd-mm-yy"
-                    />
+                    <Select v-model="filterModel.value" :options="statuses" placeholder="Select Status" showClear />
+                </template>
+            </Column>
+
+            <Column field="apdNumber" header="APD Number" filterField="apdNumber" sortable>
+                <template #body="slotProps">
+                    {{ slotProps.data.apdNumber ? slotProps.data.apdNumber : 'N/A'  }}
+                </template>
+                <template #filter="{ filterModel }">
+                    <InputText v-model="filterModel.value" placeholder="Search by APD" />
                 </template>
             </Column>
 
@@ -122,9 +130,18 @@
 
             <Column header="Actions">
                 <template #body="slotProps">
-                    <button class="icon-btn mx-3" @click="onDelete(slotProps.data)">
-                        <i class="bi bi-trash-fill fs-5 primary-color"></i>
+                    <button v-if="slotProps.data.status == 'Active'" class="icon-btn" @click="onDelete(slotProps.data)">
+                        <i class="bi bi-trash-fill fs-5 error-color"></i>
                     </button>
+                    <div v-if="slotProps.data.status == 'Pending approval'" class="d-flex align-items-center">
+                        <button class="icon-btn me-3" @click="onAcceptOrReject(slotProps.data, 'Active')">
+                            <i class="bi bi-check-square-fill fs-5 success-color"></i>
+                        </button>
+
+                        <button class="icon-btn" @click="onAcceptOrReject(slotProps.data, 'Rejected')">
+                            <i class="bi bi-x-square-fill fs-5 error-color"></i>
+                        </button>
+                    </div>
                 </template>
             </Column>
         </DataTable>
@@ -141,13 +158,17 @@ import InputIcon from 'primevue/inputicon'
 import Select from 'primevue/select'
 import DatePicker from 'primevue/datepicker'
 import { ref, onMounted } from 'vue';
-import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import { collection, getDocs, getFirestore, updateDoc, doc } from 'firebase/firestore';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { useToast } from "primevue/usetoast";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
-
+const toast = useToast();
 const roles = ref(['user', 'nutritionist']);
+
+const statuses = ref(['Setup pending', 'Pending approval', 'Active', 'Rejected']);
 
 const dt = ref(null);
 
@@ -157,18 +178,26 @@ const toggleDropdown = () => {
     dropdownOpen.value = !dropdownOpen.value
 };
 
+const getStatusBox = (status) => {
+    if(status == "Setup pending") {
+        return 'gray-box';
+    } else if(status == "Pending approval") {
+        return 'warning-box';
+    } else if(status == "Active") {
+        return 'success-box';
+    } else {
+        return 'error-box';
+    }
+};
+
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     firstName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
     lastName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
     role: { value: null, matchMode: FilterMatchMode.EQUALS },
+    status: { value: null, matchMode: FilterMatchMode.EQUALS },
     email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-    dob: {
-        operator: 'and',
-        constraints: [
-            { value: null, matchMode: FilterMatchMode.DATE_IS }
-        ]
-    },
+    apdNumber: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
     createdAt: {
         operator: 'and',
         constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
@@ -204,6 +233,10 @@ const clearFilter = () => {
 };
 
 onMounted(async () => {
+    fetchUserData();
+});
+
+const fetchUserData = async () => {
     try {
         const querySnapshot = await getDocs(collection(db, 'users'));
         users.value = querySnapshot.docs.map(doc => {
@@ -221,7 +254,7 @@ onMounted(async () => {
         loading.value = false;
         console.log(users.value[0].dob instanceof Date)
     }
-});
+};
 
 const formatDate = (date) => {
   if (!(date instanceof Date)) return '';
@@ -242,6 +275,8 @@ const exportCSVFile = () => {
         "Last name": u.lastName,
         "Email": u.email,
         "Role": u.role,
+        "Status": u.status,
+        "APD Number": u.apdNumber,
         "Date of birth": u.dob ? formatDate(u.dob) : '',
         "Date joined": u.createdAt ? formatDate(u.createdAt) : ''
     }));
@@ -272,6 +307,8 @@ const exportPDFFile = () => {
     { header: 'Last name', dataKey: 'lastName' },
     { header: 'Email', dataKey: 'email' },
     { header: 'Role', dataKey: 'role' },
+    { header: 'Status', dataKey: 'status' },
+    { header: 'APD Number', dataKey: 'apdNumber' },
     { header: 'Date of birth', dataKey: 'dob' },
     { header: 'Date joined', dataKey: 'createdAt' }
   ];
@@ -293,6 +330,50 @@ const exportPDFFile = () => {
   });
 
   doc.save('Users.pdf');
+};
+
+const onAcceptOrReject = async (userData, newStatus) => {
+    loading.value = true;
+  try {
+    if (!userData?.userId) {
+      throw new Error("User ID is missing.");
+    }
+
+    const userRef = doc(db, "users", userData.userId);
+
+    await updateDoc(userRef, {
+        status: newStatus
+    });
+
+    const functions = getFunctions();
+    const notifyUserOnProfileUpdate = httpsCallable(functions, "notifyUserOnProfileUpdate");
+
+    await notifyUserOnProfileUpdate({
+      name: `${userData.firstName + " " + userData.lastName}`,
+      email: userData.email,
+      status: newStatus
+    });
+
+    toast.add({
+      severity: "success",
+      summary: "Status Updated",
+      detail: `User status changed to ${newStatus}. Email notification sent !`,
+      life: 3000,
+    });
+
+    fetchUserData();
+
+  } catch (error) {
+    console.error("Error updating status:", error);
+    toast.add({
+      severity: "error",
+      summary: "Update Failed",
+      detail: "Unable to update user status.",
+      life: 3000,
+    });
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

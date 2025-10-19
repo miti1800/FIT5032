@@ -2,13 +2,13 @@
   <header class="d-flex justify-content-between align-items-center px-1 px-sm-3 p-3 bg-white shadow header">
     <div class="d-flex align-items-center">
         <button
-            v-if="userStore.currentUser"
+            v-if="userStore.currentUser && userStore.currentUser.status == 'Active'"
             class="icon-btn hamburger primary-color"
             @click="toggleSidebar"
         >
             <i class="bi bi-list fs-3 primary-color"></i>
         </button>
-        <h3 v-if="!userStore.currentUser" class="px-2 mb-0 fw-bold primary-color">
+        <h3 v-if="!userStore.currentUser || userStore.currentUser.status != 'Active'" class="px-2 mb-0 fw-bold primary-color">
             <img :src="logo" alt="App logo" class="app-logo"/> 
             NutriED
         </h3>
@@ -42,13 +42,6 @@
     </div>
     
     <div v-if="userStore.currentUser" class="d-flex align-items-center" style="position: relative;">
-        <div class="px-3">
-            <button
-                class="icon-btn primary-color"
-            >
-                <i class="bi bi-bell-fill fs-5 primary-color"></i>
-            </button>
-        </div>
         <button
             class="icon-btn primary-color"
             @click="toggleDropdown"
@@ -60,7 +53,7 @@
             <div class="px-3 py-2 border-bottom">
                 <strong>{{ userStore.currentUser.firstName }} {{ userStore.currentUser.lastName }}</strong>
             </div>
-            <small class="dropdown-item">
+            <small v-if="userStore.currentUser.status == 'Active'" class="dropdown-item">
                 <i class="bi bi-gear-fill me-2"></i>
                 Settings
             </small>

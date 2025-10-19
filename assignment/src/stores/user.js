@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { db, auth } from '@/firebaseconfig'
+import { db, auth } from '@/firebaseConfig'
 import { doc, getDoc } from 'firebase/firestore'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
 

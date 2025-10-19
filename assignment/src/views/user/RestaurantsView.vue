@@ -299,7 +299,7 @@ export default {
 
 .clear-btn {
   position: absolute;
-  right: 9%;
+  right: 23%;
   top: 50%;
   transform: translateY(-50%);
   border: none;

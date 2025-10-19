@@ -1,4 +1,8 @@
 <template>
+    <div v-if="recipes.length === 0" class="text-center p-5 loader-overlay">
+        <span class="spinner-border me-2" role="status"></span>
+        <p class="mt-2">Loading...</p>
+    </div>
     <div class="px-4 pt-3 m-2 primary-color">
         <div class="d-flex align-items-center fw-lighter">User > &nbsp;
             <p class="fw-normal text-decoration-underline mb-0">Dashboard</p>
@@ -40,7 +44,7 @@
             </div>
         </div>
 
-        <div class="row my-4">
+        <div class="row mt-4 mb-1">
             <div class="col-12">
                 <h5 class="fw-bold mb-2">Recent recipes</h5>
             </div>
@@ -59,5 +63,32 @@
 <script setup>
 import StatsCard from '@/components/StatsCard.vue';
 import RecipeCard from '@/components/RecipeCard.vue';
-import recipes from '@/assets/json/recipes.json';
+import { ref, onMounted } from 'vue';
+import { db } from '@/firebaseConfig';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+
+const recipes = ref([]);
+const loading = ref(false);
+
+const fetchRecentRecipes = async () => {
+    loading.value = true;
+    try {
+        const recipesRef = collection(db, "recipes");
+
+        const q = query(recipesRef, orderBy("posted_on", "desc"), limit(3));
+        const querySnapshot = await getDocs(q);
+        recipes.value = querySnapshot.docs.map(doc => ({
+            recipeId: doc.id,
+            ...doc.data()
+        }));
+    } catch (error) {
+        console.error("Error fetching recent recipes:", error);
+    } finally {
+        loading.value = false;
+    }
+};
+
+onMounted(() => {
+  fetchRecentRecipes();
+});
 </script>
