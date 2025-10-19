@@ -336,10 +336,12 @@ body {
   width: 100%;
   text-align: left;
   cursor: pointer;
+  color: var(--primary);
 }
 
 .dropdown-item:hover {
   background: var(--secondary);
+  color: var(--primary);
 }
 
 .border-radius8 {

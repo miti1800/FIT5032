@@ -121,11 +121,8 @@
                     <router-link :to="{ name: 'RecipeDetailView', params: { id: slotProps.data.recipeId } }"
                         class="icon-btn me-3"
                     >
-                        <i class="bi bi-file-earmark-text-fill fs-5 primary-color"></i>
+                        <i class="bi bi-file-earmark-text-fill fs-5 success-color"></i>
                     </router-link>
-                    <button class="icon-btn" @click="onDelete(slotProps.data)">
-                        <i class="bi bi-trash-fill fs-5 primary-color"></i>
-                    </button>
                 </template>
             </Column>
         </DataTable>

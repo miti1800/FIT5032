@@ -130,9 +130,6 @@
 
             <Column header="Actions">
                 <template #body="slotProps">
-                    <button v-if="slotProps.data.status == 'Active'" class="icon-btn" @click="onDelete(slotProps.data)">
-                        <i class="bi bi-trash-fill fs-5 error-color"></i>
-                    </button>
                     <div v-if="slotProps.data.status == 'Pending approval'" class="d-flex align-items-center">
                         <button class="icon-btn me-3" @click="onAcceptOrReject(slotProps.data, 'Active')">
                             <i class="bi bi-check-square-fill fs-5 success-color"></i>
@@ -262,10 +259,6 @@ const formatDate = (date) => {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
   return `${day}-${month}-${year}`;
-};
-
-const onDelete = (user) => {
-  console.log('Deleting', user)
 };
 
 const exportCSVFile = () => {

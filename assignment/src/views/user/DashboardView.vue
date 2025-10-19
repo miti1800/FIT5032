@@ -10,43 +10,20 @@
     </div>
     <div class="container-fluid p-4 py-2 primary-color">
         <div class="row">
-            <div class="col-md-3 col-sm-6 col-12 py-3">
-                <StatsCard
-                    title="Saved Recipes"
-                    value="Recipes You Love..."
-                    :percentage="100"
-                    icon="bi bi-heart-fill"
-                />
-            </div>
-            <div class="col-md-3 col-sm-6 col-12 py-3">
-                <StatsCard
-                    title="Joined Communities"
-                    value="Your social food journey..."
-                    :percentage="5"
-                    icon="bi bi-people-fill"
-                />
-            </div>
-            <div class="col-md-3 col-sm-6 col-12 py-3">
-                <StatsCard
-                    title="Recipes Shared"
-                    value="Your shared dishes..."
-                    :percentage="5"
-                    icon="bi bi-fork-knife"
-                />
-            </div>
-            <div class="col-md-3 col-sm-6 col-12 py-3">
-                <StatsCard
-                    title="Reward points"
-                    value="Total points earned so far..."
-                    :percentage="1200"
-                    icon="bi bi-trophy-fill"
-                />
+            <div class="col-12 py-3 d-flex flex-column align-items-center text-center">
+                <h3 class="fw-bold">Hello {{ `${userStore.currentUser.firstName} ${userStore.currentUser.lastName}!!`}}</h3>
+                <span class="success-box px-4 py-2 mt-3">Small changes in what you eat today, can create big changes in how you feel tomorrow.</span>
             </div>
         </div>
 
         <div class="row mt-4 mb-1">
-            <div class="col-12">
+            <div class="col-12 d-flex justify-content-between align-items-center">
                 <h5 class="fw-bold mb-2">Recent recipes</h5>
+                <router-link to="/recipes">
+                    <button class="btn primary-btn">
+                        Explore more recipes
+                    </button>
+                </router-link>
             </div>
         </div>
             
@@ -66,9 +43,11 @@ import RecipeCard from '@/components/RecipeCard.vue';
 import { ref, onMounted } from 'vue';
 import { db } from '@/firebaseConfig';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { useUserStore } from '@/stores/user';
 
 const recipes = ref([]);
 const loading = ref(false);
+const userStore = useUserStore();
 
 const fetchRecentRecipes = async () => {
     loading.value = true;

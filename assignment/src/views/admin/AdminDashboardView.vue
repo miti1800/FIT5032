@@ -24,7 +24,7 @@
             </div>
             <div class="col-md-3 col-sm-6 col-12 py-3">
                 <StatsCard title="Unresolved Queries" value="Queries awaiting resolution" :percentage="`${unresolvedQueries}`"
-                    icon="bi bi-people-fill" />
+                    icon="bi bi-question-square-fill" />
             </div>
         </div>
 

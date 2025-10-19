@@ -17,6 +17,7 @@ import RestaurantsView from '@/views/user/RestaurantsView.vue';
 import RecipesView from '@/views/user/RecipesView.vue';
 import PostRecipeView from '@/views/user/PostRecipeView.vue';
 import SetupProfileView from '@/views/SetupProfileView.vue';
+import ProfileView from '@/views/user/ProfileView.vue';
 
 const routes = [
   {
@@ -43,6 +44,12 @@ const routes = [
     path: '/setup-profile',
     name: 'Setup Profile',
     component: SetupProfileView,
+    meta: { requiresAuth: true, roles: ["user", "nutritionist"] }
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: ProfileView,
     meta: { requiresAuth: true, roles: ["user", "nutritionist"] }
   },
   {

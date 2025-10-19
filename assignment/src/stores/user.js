@@ -15,7 +15,7 @@ export const useUserStore = defineStore('user', {
     async fetchUserProfile(uid) {
       const userDoc = await getDoc(doc(db, 'users', uid))
       if (userDoc.exists()) {
-        const userData = { id: uid, ...userDoc.data() }
+        const userData = { userId: uid, ...userDoc.data() }
         this.setUser(userData)
       } else {
         this.setUser(null)

@@ -53,10 +53,6 @@
             <div class="px-3 py-2 border-bottom">
                 <strong>{{ userStore.currentUser.firstName }} {{ userStore.currentUser.lastName }}</strong>
             </div>
-            <small v-if="userStore.currentUser.status == 'Active'" class="dropdown-item">
-                <i class="bi bi-gear-fill me-2"></i>
-                Settings
-            </small>
             <button class="dropdown-item small" @click="logout">
                 <i class="bi bi-box-arrow-right me-2"></i> Logout
             </button>

@@ -9,11 +9,7 @@
                 </div>
             </div>
             <div v-if="isAdmin" class="d-flex align-items-center">
-              <i class="bi bi-pencil-square fs-4 me-2"></i>
               <i class="bi bi-trash-fill fs-4"></i>
-            </div>
-            <div v-else>
-              <i class="bi bi-bookmark-fill fs-4"></i>
             </div>
         </div>
 

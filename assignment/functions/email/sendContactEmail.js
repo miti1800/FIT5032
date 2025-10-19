@@ -18,7 +18,7 @@ export const sendContactEmail = onCall(
         console.log("SendGrid API Key loaded?", !!process.env.SENDGRID_API_KEY);
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-        // Generate PDF in memory
+        // Generate PDF
         const doc = new PDFDocument({ margin: 50 });
         const buffers = [];
         doc.on("data", (chunk) => buffers.push(chunk));

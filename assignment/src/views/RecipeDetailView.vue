@@ -16,14 +16,11 @@
                         <small>Posted on {{ formatDate(recipe.posted_on?.seconds ? new Date(recipe.posted_on.seconds * 1000) : null) }}</small>
                     </div>
                     <div v-if="isAdmin" class="d-flex align-items-center">
-                        <i class="bi bi-pencil-square fs-4 me-2"></i>
-                        <i class="bi bi-trash-fill fs-4"></i>
-                    </div>
-                    <div v-else>
-                        <i class="bi bi-bookmark-fill fs-4"></i>
+                        <button class="icon-btn" @click="removeRecipe">
+                            <i class="bi bi-trash-fill fs-4 error-color"></i>
+                        </button>
                     </div>
                 </div>
-                
                 
                 <div class="col-md-6 mx-auto">
                     <div class="card">
@@ -187,14 +184,20 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import recipes from '@/assets/json/recipes.json';
 import { useRoute } from 'vue-router';
 import Rating from '@/components/Rating.vue';
 import { useUserStore } from '@/stores/user';
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { doc, getDoc, getFirestore, updateDoc, arrayUnion, deleteDoc } from "firebase/firestore";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { getApp } from "firebase/app";
+import { useToast } from "primevue/usetoast";
+
+const toast = useToast();
 
 const userStore = useUserStore();
 const db = getFirestore();
+const functions = getFunctions(getApp());
+const deleteImageByURL = httpsCallable(functions, "deleteImageByURL");
 
 const props = defineProps({
     id: {
@@ -216,18 +219,51 @@ onMounted(async () => {
     
     const recipeDoc = await getDoc(doc(db, "recipes", recipeId));
     recipe.value = { recipeId, ...recipeDoc.data() };
-    hasUserRated.value = recipe.value.user_id.includes(userStore.currentUser.user_id);
+    hasUserRated.value = recipe.value.user_id.includes(userStore.currentUser.userId);
 
     console.log(recipe.value);
 });
 
-const handleRatingAdded = (rating) => {
-    hasUserRated.value = true
-    if (recipe.value) {
-        recipe.value.rating.push(rating)
-        recipe.value.user_id.push(userStore.currentUser.user_id)
+const handleRatingAdded = async (rating) => {
+    if (!userStore.currentUser?.userId || !recipe.value?.recipeId) return;
+
+    hasUserRated.value = true;
+
+    try {
+        const recipeRef = doc(db, "recipes", recipe.value.recipeId);
+        const recipeSnap = await getDoc(recipeRef);
+
+        if (recipeSnap.exists()) {
+            const data = recipeSnap.data();
+            const ratings = data.rating || [];
+            const userIds = data.user_id || [];
+
+            await updateDoc(recipeRef, {
+                rating: [...ratings, rating],
+                user_id: [...userIds, userStore.currentUser.userId]
+            });
+
+            recipe.value.rating.push(rating);
+            recipe.value.user_id.push(userStore.currentUser.userId);
+        }
+
+        toast.add({
+            severity: "success",
+            summary: "Recipe ratings updated",
+            detail: `User rated the recipe!`,
+            life: 3000,
+        });
+
+        console.log(`User rated the recipe: ${rating} stars`);
+    } catch (error) {
+        console.error("Error updating recipe rating:", error);
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: `Error updating recipe rating!`,
+            life: 3000,
+        });
     }
-    console.log(`User rated the recipe: ${rating} stars`);
 };
 
 const formatDate = (date) => {
@@ -236,6 +272,39 @@ const formatDate = (date) => {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
   return `${day}-${month}-${year}`;
+};
+
+const removeRecipe = async () => {
+    if (!recipe.value || !recipe.value.recipeId) return;
+
+    const confirmDelete = confirm("Are you sure you want to delete this recipe?");
+    if (!confirmDelete) return;
+
+    try {
+        if (recipe.value.image) {
+            await deleteImageByURL({ publicURL: recipe.value.image });
+            console.log("Image deleted successfully.");
+        }
+
+        await deleteDoc(doc(db, "recipes", recipe.value.recipeId));
+        console.log("Recipe deleted successfully.");
+
+        toast.add({
+            severity: "success",
+            summary: "Recipe deleted",
+            detail: "Recipe has been deleted successfully!",
+            life: 3000,
+        });
+        window.history.back();
+    } catch (error) {
+        console.error("Error deleting recipe:", error);
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Failed to delete recipe. Please try again.",
+            life: 5000,
+        });
+    }
 };
 </script>
 
