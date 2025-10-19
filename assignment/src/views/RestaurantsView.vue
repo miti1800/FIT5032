@@ -1,10 +1,10 @@
 <template>
     <div class="px-4 pt-3 m-2 primary-color">
-        <div class="d-flex align-items-center fw-lighter">User > &nbsp;
+        <!-- <div class="d-flex align-items-center fw-lighter">User > &nbsp;
             <p class="fw-normal text-decoration-underline mb-0">Restaurants</p>
-        </div>
+        </div> -->
 
-        <h5 class="mt-3 mb-0">Discover Healthy Eateries in Your Area</h5>
+        <h3 class="mt-3 mb-0 text-center fw-bold">Discover Healthy Eateries in Your Area</h3>
     </div>
     <div class="container-fluid p-4 py-2 primary-color">
         <div class="row">

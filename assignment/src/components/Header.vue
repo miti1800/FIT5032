@@ -27,6 +27,9 @@
         <router-link to="/" class="nav-link p-2" active-class="active">
             Home
         </router-link>
+        <router-link to="/restaurants" class="nav-link p-2" active-class="active">
+            Restaurants
+        </router-link>
         <router-link to="/contact-us" class="nav-link p-2" active-class="active">
             Contact Us
         </router-link>

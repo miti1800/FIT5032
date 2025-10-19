@@ -13,7 +13,7 @@ import ForgotPassword from '@/views/ForgotPassword.vue';
 import RecipesListView from '@/views/admin/RecipesListView.vue';
 import { auth } from '@/firebaseConfig';
 import QueriesView from '@/views/admin/QueriesView.vue';
-import RestaurantsView from '@/views/user/RestaurantsView.vue';
+import RestaurantsView from '@/views/RestaurantsView.vue';
 import RecipesView from '@/views/user/RecipesView.vue';
 import PostRecipeView from '@/views/user/PostRecipeView.vue';
 import SetupProfileView from '@/views/SetupProfileView.vue';
@@ -104,8 +104,7 @@ const routes = [
   {
     path: '/restaurants',
     name: 'Restaurants',
-    component: RestaurantsView,
-    meta: { requiresAuth: true, roles: ["user", "nutritionist"] }
+    component: RestaurantsView
   },
   {
     path: '/forgot-password',
