@@ -4,10 +4,6 @@
             <div class="row align-items-center pt-5">
                 <div class="col-lg-7 col-xl-6">
                     <div class="hero-content py-5">
-                        <div class="badge secondary-bg px-3 py-2 mb-4">
-                            <i class="bi bi-trophy-fill me-2"></i>
-                            #1 Nutrition Education Platform
-                        </div>
 
                         <h1 class="display-2 fw-bold mb-4 lh-1 primary-color">
                             Master the
